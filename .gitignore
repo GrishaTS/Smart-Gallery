@@ -1,6 +1,7 @@
 .venv
 __pycache__
 free.py
-media
-images
-preview
+*.png
+*.jpg
+*.jpeg
+*.JPG
