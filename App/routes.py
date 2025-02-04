@@ -3,10 +3,14 @@ from views.main_view import main_view
 from views.image_view import image_view
 from views.del_images_view import del_images_view
 
-def setup_routes(page: ft.Page):
-    def on_route_change(e):
+
+def setup_routes(page: ft.Page) -> None:
+    '''Настраивает маршрутизацию для приложения.'''
+
+    def on_route_change(event: ft.RouteChangeEvent) -> None:
+        '''Обрабатывает изменение маршрута и загружает соответствующую страницу.'''
         page.views.clear()
-        route_path = e.route.split('?')[0]
+        route_path = event.route.split('?')[0]
 
         routes = {
             '/': main_view,
@@ -14,10 +18,10 @@ def setup_routes(page: ft.Page):
             '/del_images': del_images_view,
         }
 
-        if route_path in routes:
-            new_view = ft.View(route=route_path, controls=[routes[route_path](page)])
-        else:
-            new_view = ft.View(route=route_path, controls=[ft.Text('Страница не найдена')])
+        new_view = ft.View(
+            route=route_path,
+            controls=[routes.get(route_path, lambda _: ft.Text('Страница не найдена'))(page)],
+        )
 
         page.views.append(new_view)
         page.update()
