@@ -7,7 +7,7 @@ def main_view(page: ft.Page) -> ft.Column:
     'Главное окно приложения с отображением изображений, сортировкой, поиском и загрузкой.'
     page.clean()
 
-    query_params = page.query.to_dict()
+    query_params = page.query.to_dict
     sort_order = query_params.get('sort', 'date_create')
     order_direction = query_params.get('order', 'DESC')
 
@@ -94,8 +94,9 @@ def main_view(page: ft.Page) -> ft.Column:
         if event.files:
             for file in event.files:
                 insert_image(file.path)
-            images = get_preview_list(sort=sort_order, order=order_direction)
-            update_image_grid()
+                images = get_preview_list(sort=sort_order, order=order_direction)
+                update_image_grid()
+                page.update()
 
     file_picker = ft.FilePicker(on_result=on_file_picked)
     page.overlay.append(file_picker)

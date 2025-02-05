@@ -1,6 +1,6 @@
 import flet as ft
 from utils.theme import toggle_theme
-from utils.database import get_image_by_id, get_image_list, delete_image, get_adjacent_images
+from utils.database import get_image_by_id, delete_image, get_adjacent_images
 
 
 def image_view(page: ft.Page) -> ft.Column:

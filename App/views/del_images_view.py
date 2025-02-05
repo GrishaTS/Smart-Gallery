@@ -6,7 +6,7 @@ def del_images_view(page: ft.Page) -> ft.Column:
     'Создаёт страницу для удаления изображений.'
     page.clean()
 
-    query_params = page.query.to_dict()
+    query_params = page.query.to_dict
     sort_order = query_params.get('sort', 'date_create')
     sort_direction = query_params.get('order', 'DESC')
 

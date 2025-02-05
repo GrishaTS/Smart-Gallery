@@ -1,4 +1,4 @@
-from flet import ControlEvent, Page, ThemeMode
+from flet import ControlEvent, ThemeMode
 
 def toggle_theme(e: ControlEvent) -> None:
     '''Переключает тему страницы между светлой и тёмной.'''
