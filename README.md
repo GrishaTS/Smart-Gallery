@@ -1,4 +1,4 @@
-# Coursework
+# Smart-Gallery
 
 ## Курсовая работа ВШЭ ФКН ПИ 2 курс
 
