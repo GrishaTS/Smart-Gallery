@@ -1,6 +1,5 @@
 .env
 .venv
 __pycache__
-free.py
 storage
 gallery.db
