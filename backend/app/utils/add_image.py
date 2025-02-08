@@ -39,11 +39,9 @@ async def process_image(file: UploadFile) -> tuple[str, str, str, str, int]:
     embedding_path = os.path.join(settings.EMBEDDINGS_PATH, f'{filename}.json')
     await save_embedding(embedding_path)
 
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     size = os.path.getsize(image_path)
     
     return dict(image_path=image_path,
                 thumbnail_path=thumbnail_path,
                 embedding_path=embedding_path,
-                timestamp=timestamp,
                 size=size)

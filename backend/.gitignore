@@ -1,4 +1,5 @@
 gallery.db
-media
+storage
 .venv
 __pycache__
+.env
