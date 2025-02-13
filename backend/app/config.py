@@ -7,6 +7,13 @@ class Settings(BaseSettings):
     HOST: str = 'localhost'
     PORT: int = 8000
 
+    UI_HOST: str = 'localhost'
+    UI_PORT: int = 5137
+
+    @property
+    def UI_URL(self):
+        return f'http://{self.UI_HOST}:{self.UI_PORT}'
+
     @property
     def DATABASE_URL(self):
         return f'sqlite+aiosqlite:///{self.DB_NAME}.db'
