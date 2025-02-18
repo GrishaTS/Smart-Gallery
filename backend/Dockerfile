@@ -1,21 +1,10 @@
-# Используем официальный образ Python
-FROM python:3.11.9-slim
+FROM python:3.11-slim
 
-# Устанавливаем рабочую директорию
-WORKDIR /app
+WORKDIR /backend
 
-# Устанавливаем Poetry
-ENV POETRY_VERSION=1.8.2
-RUN pip install "poetry==$POETRY_VERSION"
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем файлы зависимостей
-COPY backend/pyproject.toml backend/poetry.lock ./
+COPY . .
 
-# Устанавливаем зависимости через Poetry (без виртуального окружения)
-RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction --no-ansi
-
-# Копируем остальной код
-COPY backend/ .  
-
-# Запускаем приложение
-CMD ["python", "main.py"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

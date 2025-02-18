@@ -1,12 +1,14 @@
+import os
 from contextlib import asynccontextmanager
 
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from fastapi.staticfiles import StaticFiles
 
-from database import create_tables, delete_tables, create_media_folders, delete_media_folders
-from router import router_image ,router_images
-from config import settings
+from app.database import create_tables, delete_tables, create_media_folders, delete_media_folders
+from app.router import router_image ,router_images
+from app.config import settings
 
 
 # потом удалить даже не понимаю зач надо
@@ -20,7 +22,6 @@ async def lifespan(app: FastAPI):
     await delete_media_folders()
     print('База очищена')
 
-
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(router_image)
@@ -30,10 +31,12 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.UI_URL],
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
+os.makedirs(settings.MEDIA_PATH, exist_ok=True)
+app.mount("/storage", StaticFiles(directory=settings.MEDIA_PATH), name="storage")
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', host=settings.HOST, port=settings.PORT, reload=True, reload_dirs=['app'])
+if __name__ == "__main__":
+    uvicorn.run(app, host=settings.HOST, port=settings.PORT)

@@ -1,16 +1,45 @@
 networks:
   dev:
+    driver: bridge
+
+volumes:
+  gallery_storage:  # Объявляем volume
 
 services:
-  backend:
-    build:
-      context: ./backend
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+      - gallery_storage:/app/storage  # Даем доступ к volume
+    depends_on:
+      - backend
+      - frontend
     networks:
-      -dev
+      - dev
 
-  
   frontend:
     build:
       context: ./frontend
+    environment:
+      - API_HOST=backend
+      - API_PORT=8000
+    ports:
+      - "3000:3000"
+    volumes:
+      - gallery_storage:/app/storage  # Доступ к файлам изображений
     networks:
-      -dev
+      - dev
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - gallery_storage:/app/storage  # Используем общий volume
+    networks:
+      - dev

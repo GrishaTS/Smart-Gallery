@@ -1,47 +1,52 @@
 import os
 import uuid
 import json
-from datetime import datetime
 from fastapi import UploadFile
 from PIL import Image
-from config import settings
 import aiofiles
 from fastapi.concurrency import run_in_threadpool
+from app.config import settings
 
 async def save_image(file: UploadFile, image_path: str):
     contents = await file.read()
     async with aiofiles.open(image_path, 'wb') as f:
         await f.write(contents)
 
-def _save_thumbnail(image_path: str, thumbnail_path: str, size=(150, 150)):
+def _save_thumbnail(image_path: str, preview_path: str, size=(150, 150)):
     with Image.open(image_path) as img:
         img.thumbnail(size)
-        img.save(thumbnail_path)
+        img.save(preview_path)
 
-async def save_thumbnail(image_path: str, thumbnail_path: str, size=(150, 150)):
-    await run_in_threadpool(_save_thumbnail, image_path, thumbnail_path, size)
+async def save_thumbnail(image_path: str, preview_path: str, size=(150, 150)):
+    await run_in_threadpool(_save_thumbnail, image_path, preview_path, size)
 
 async def save_embedding(embedding_path: str):
     embedding = [1, 2, 3]
     async with aiofiles.open(embedding_path, 'w') as f:
         await f.write(json.dumps(embedding))
 
-async def process_image(file: UploadFile) -> tuple[str, str, str, str, int]:
+async def process_image(file: UploadFile) -> dict:
     filename = str(uuid.uuid4())
     ext = os.path.splitext(file.filename)[1]
-    
+
     image_path = os.path.join(settings.IMAGES_PATH, filename + ext)
-    await save_image(file, image_path)
-    
-    thumbnail_path = os.path.join(settings.THUMBNAILS_PATH, filename + ext)
-    await save_thumbnail(image_path, thumbnail_path)
-    
+    preview_path = os.path.join(settings.THUMBNAILS_PATH, filename + ext)
     embedding_path = os.path.join(settings.EMBEDDINGS_PATH, f'{filename}.json')
+
+    await save_image(file, image_path)
+    await save_thumbnail(image_path, preview_path)
     await save_embedding(embedding_path)
 
     size = os.path.getsize(image_path)
-    
-    return dict(image_path=image_path,
-                thumbnail_path=thumbnail_path,
-                embedding_path=embedding_path,
-                size=size)
+
+    image_url = os.path.join(settings.IMAGES_URL, filename + ext)
+    print(settings.IMAGES_URL, settings.IMAGES_PATH)
+    preview_url = os.path.join(settings.THUMBNAILS_URL, filename + ext)
+    embedding_url = os.path.join(settings.EMBEDDINGS_URL, f'{filename}.json')
+
+    return {
+        "image_path": image_url,
+        "preview_path": preview_url,
+        "embedding_path": embedding_url,
+        "size": size
+    }

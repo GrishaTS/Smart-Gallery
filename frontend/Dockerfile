@@ -1,21 +1,29 @@
-# Используем официальный образ Python
-FROM python:3.11.9-slim
+FROM python:3.12-alpine
 
-# Устанавливаем рабочую директорию
-WORKDIR /app
+WORKDIR /frontend
 
-# Устанавливаем Poetry
-ENV POETRY_VERSION=1.8.2
-RUN pip install "poetry==$POETRY_VERSION"
+# Установка зависимостей для Flet
+RUN apk add --no-cache \
+    gtk+3.0 \
+    libx11 \
+    gstreamer \
+    gst-plugins-good \
+    gst-plugins-bad \
+    gst-plugins-base \
+    ffmpeg \
+    bash \
+    libmagic
 
-# Копируем файлы зависимостей
-COPY frontend/pyproject.toml frontend/poetry.lock ./
+# Создание виртуального окружения
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Устанавливаем зависимости через Poetry (без виртуального окружения)
-RUN poetry config virtualenvs.create false && poetry install --no-root --no-interaction --no-ansi
+# Установка Python-зависимостей
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем остальной код
-COPY frontend/ .  
+# Копируем исходный код
+COPY . .
 
-# Запускаем приложение
-CMD ["python", "main.py"]
+# Запуск приложения
+CMD ["python", "app/main.py"]

@@ -1,35 +1,54 @@
 import os
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    DB_NAME: str = 'gallery'
-    MEDIA_PATH: str = 'storage'
-    HOST: str = 'localhost'
+    DB_NAME: str = "gallery"
+    MEDIA_PATH: str = os.path.join("/app", "storage")
+    HOST: str = "0.0.0.0"
     PORT: int = 8000
-
-    UI_HOST: str = 'localhost'
-    UI_PORT: int = 5137
+    UI_HOST: str = "0.0.0.0"
+    UI_PORT: int = 3000
+    DOCKER_HOST: str = "backend"
 
     @property
     def UI_URL(self):
-        return f'http://{self.UI_HOST}:{self.UI_PORT}'
+        return f"http://{self.UI_HOST}:{self.UI_PORT}"
 
+    @property
+    def API_URL(self):
+        return f"http://{self.HOST}:{self.PORT}"
+    
     @property
     def DATABASE_URL(self):
-        return f'sqlite+aiosqlite:///{self.DB_NAME}.db'
-    
+        return f"sqlite+aiosqlite:///{self.DB_NAME}.db"
+
     @property
     def IMAGES_PATH(self):
-        return os.path.join(self.MEDIA_PATH, 'images')
-    
+        return os.path.join(self.MEDIA_PATH, "images")
+
     @property
     def THUMBNAILS_PATH(self):
-        return os.path.join(self.MEDIA_PATH, 'thumbnails')
-    
+        return os.path.join(self.MEDIA_PATH, "thumbnails")
+
     @property
     def EMBEDDINGS_PATH(self):
-        return os.path.join(self.MEDIA_PATH, 'embeddings')
+        return os.path.join(self.MEDIA_PATH, "embeddings")
 
-    model_config = SettingsConfigDict(env_file='.env')
+    @property
+    def MEDIA_URL(self):
+        return f'http://localhost:{self.PORT}/storage'
+    
+    @property
+    def IMAGES_URL(self):
+        return os.path.join(self.MEDIA_URL, "images")
+
+    @property
+    def THUMBNAILS_URL(self):
+        return os.path.join(self.MEDIA_URL, "thumbnails")
+
+    @property
+    def EMBEDDINGS_URL(self):
+        return os.path.join(self.MEDIA_URL, "embeddings")
+
 
 settings = Settings()

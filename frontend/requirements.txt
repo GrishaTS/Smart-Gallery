@@ -1,0 +1,5 @@
+flet==0.26.0
+httpx==0.28.1
+pydantic-settings==2.7.1
+websockets==15.0
+wsproto==1.2.0

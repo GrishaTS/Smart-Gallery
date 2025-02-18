@@ -1,8 +1,8 @@
 import os
 from sqlalchemy import select, asc, desc
 from fastapi.concurrency import run_in_threadpool
-from database import ImageOrm, new_session
-from schemas import SImageAdd, SImage
+from app.database import ImageOrm, new_session
+from app.schemas import SImageAdd, SImage
 
 class ImageRepository:
     @classmethod
@@ -49,7 +49,7 @@ class ImageRepository:
 
             if image_model:
                 image_path = image_model.image_path
-                thumbnail_path = image_model.thumbnail_path
+                preview_path = image_model.preview_path
                 embedding_path = image_model.embedding_path
 
                 await session.delete(image_model)
@@ -57,8 +57,8 @@ class ImageRepository:
 
                 if os.path.exists(image_path):
                     await run_in_threadpool(os.remove, image_path)
-                if os.path.exists(thumbnail_path):
-                    await run_in_threadpool(os.remove, thumbnail_path)
+                if os.path.exists(preview_path):
+                    await run_in_threadpool(os.remove, preview_path)
                 if os.path.exists(embedding_path):
                     await run_in_threadpool(os.remove, embedding_path)
 
@@ -102,7 +102,7 @@ class ImageRepository:
             count_deleted = 0
             for image_model in image_models:
                 image_path = image_model.image_path
-                thumbnail_path = image_model.thumbnail_path
+                preview_path = image_model.preview_path
                 embedding_path = image_model.embedding_path
 
                 await session.delete(image_model)
@@ -110,8 +110,8 @@ class ImageRepository:
 
                 if os.path.exists(image_path):
                     await run_in_threadpool(os.remove, image_path)
-                if os.path.exists(thumbnail_path):
-                    await run_in_threadpool(os.remove, thumbnail_path)
+                if os.path.exists(preview_path):
+                    await run_in_threadpool(os.remove, preview_path)
                 if os.path.exists(embedding_path):
                     await run_in_threadpool(os.remove, embedding_path)
             await session.commit()

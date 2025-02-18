@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 
 class SImageAdd(BaseModel):
     image_path: str
-    thumbnail_path: str
+    preview_path: str
     embedding_path: str
     size: int
     uploaded_at: datetime | None = None

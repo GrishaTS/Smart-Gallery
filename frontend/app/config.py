@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
 import flet as ft
+from pydantic_settings import BaseSettings
 
 DARK_THEME = ft.Theme(
     color_scheme=ft.ColorScheme(
@@ -23,17 +24,10 @@ DARK_THEME = ft.Theme(
 )
 
 class Settings(BaseSettings):
-    HOST: str = 'localhost'
-    PORT: int = 5137
-
-    API_HOST: str = 'localhost'
-    API_PORT: int = 8000
-
-    @property
-    def API_URL(self):
-        return f'http://{self.API_HOST}:{self.API_PORT}'
-    
-    model_config = SettingsConfigDict(env_file='.env')
-
+    HOST: str = "0.0.0.0"
+    PORT: int = 3000
+    API_HOST: str = os.getenv("API_HOST", "backend")
+    API_PORT: int = int(os.getenv("API_PORT", 8000))
+    API_URL: str = f"http://{API_HOST}:{API_PORT}"
 
 settings = Settings()

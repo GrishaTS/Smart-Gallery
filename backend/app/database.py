@@ -3,7 +3,7 @@ import shutil
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy import Integer, DateTime, Text, func
-from config import settings
+from app.config import settings
 
 engine = create_async_engine(settings.DATABASE_URL)
 new_session = async_sessionmaker(engine, expire_on_commit=False)
@@ -18,7 +18,7 @@ class ImageOrm(Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, index=True)
     image_path: Mapped[str]
-    thumbnail_path: Mapped[str]
+    preview_path: Mapped[str]
     embedding_path: Mapped[str]
     uploaded_at: Mapped[str] = mapped_column(DateTime, default=func.now())
     size: Mapped[int]
