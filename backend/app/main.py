@@ -37,6 +37,3 @@ app.add_middleware(
 
 os.makedirs(settings.MEDIA_PATH, exist_ok=True)
 app.mount("/storage", StaticFiles(directory=settings.MEDIA_PATH), name="storage")
-
-if __name__ == "__main__":
-    uvicorn.run(app, host=settings.HOST, port=settings.PORT)

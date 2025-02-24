@@ -3,7 +3,7 @@ networks:
     driver: bridge
 
 volumes:
-  gallery_storage:  # Объявляем volume
+  gallery_storage:
 
 services:
   nginx:
@@ -14,7 +14,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - /etc/letsencrypt:/etc/letsencrypt
-      - gallery_storage:/app/storage  # Даем доступ к volume
+      - gallery_storage:/app/storage
     depends_on:
       - backend
       - frontend
@@ -30,7 +30,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - gallery_storage:/app/storage  # Доступ к файлам изображений
+      - gallery_storage:/app/storage
     networks:
       - dev
 
@@ -40,6 +40,6 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - gallery_storage:/app/storage  # Используем общий volume
+      - gallery_storage:/app/storage
     networks:
       - dev

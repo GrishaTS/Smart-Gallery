@@ -18,7 +18,7 @@ class ImagesView(BaseView):
             grid.controls.append(
                 ft.Container(
                     content=ft.Image(src=img.preview_path, expand=True, fit='cover'),
-                    on_click=lambda _, img_id=img.id: self.page.go('/image', img=img_id), # sort
+                    on_click=lambda _, img_id=img.id: self.page.go('/image', img=img_id), # add sort
                     tooltip=f'{img.uploaded_at}\n{img.size} байт',
                 )
             )

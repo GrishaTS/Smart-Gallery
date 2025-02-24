@@ -2,7 +2,7 @@ import os
 import shutil
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlalchemy import Integer, DateTime, Text, func
+from sqlalchemy import Integer, DateTime, func
 from app.config import settings
 
 engine = create_async_engine(settings.DATABASE_URL)
@@ -32,6 +32,7 @@ async def create_tables():
 async def delete_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Model.metadata.drop_all)
+
 
 async def create_media_folders():
     os.makedirs(settings.IMAGES_PATH, exist_ok=True)
