@@ -1,26 +1,47 @@
 import flet as ft
-from api import images_api
+from api.images_api import images_api
 from .base_view import BaseView
 
 class ImagesView(BaseView):
+    ROUTE = '/images'
+    APP_BAR = True
+    IN_NAV_BAR = True
+    NAV_BAR_POS = 0
+    NAV_BAR_ICON = ft.Icons.HOME
+    NAV_BAR_LABEL = 'Галерея'
+
     def __init__(self, page: ft.Page):
-        super().__init__('/', page)
-        self.page = page
+        super().__init__(page)
         self.assemble_page()
-    
+
     def assemble_page(self):
-        self.controls = [ft.Text(str(images_api.fetch_images())),
-                         self.get_image_grid(),]
-    
-    def get_image_grid(self):
-        grid = ft.GridView(runs_count=3, max_extent=140, spacing=10, expand=True)
-        for img in images_api.fetch_images():
-            grid.controls.append(
+        self.expand_app_bar()
+        self.grid = ft.GridView(runs_count=3, max_extent=140, spacing=10, expand=True)
+        self.controls = [self.grid]
+        self.load_grid()
+
+    def load_grid(self):
+        self.grid.controls.clear()
+        for img in images_api.get_images():
+            self.grid.controls.append(
                 ft.Container(
-                    content=ft.Image(src=img.preview_path, expand=True, fit='cover'),
-                    on_click=lambda _, img_id=img.id: self.page.go('/image', img=img_id), # add sort
+                    content=ft.Image(src=img.img_to_base64(img.preview_path), expand=True, fit='cover'),
+                    on_click=lambda _, image_id=img.id: self.page.go(f'/image/{image_id}'),
                     tooltip=f'{img.uploaded_at}\n{img.size} байт',
                 )
             )
-        
-        return grid
+        self.page.update()
+    
+    def expand_app_bar(self):
+        def set_sorting_and_reload(self: ImagesView, sort_by):
+            images_api.set_sorting(sort_by=sort_by)
+            self.load_grid()
+
+        self.appbar.actions.append(ft.PopupMenuButton(
+            items=[
+                ft.PopupMenuItem(text="По дате", on_click=lambda e: set_sorting_and_reload(self, 'uploaded_at')),
+                ft.PopupMenuItem(text="По размеру", on_click=lambda e: set_sorting_and_reload(self, 'size')),
+            ],
+            icon=ft.Icons.SORT,
+            tooltip="Отсортировать"
+        ))

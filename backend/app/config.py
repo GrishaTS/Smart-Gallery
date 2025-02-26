@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DB_NAME: str = "gallery"
-    MEDIA_PATH: str = os.path.join("/app", "storage")
+    MEDIA_FOLDER: str = "storage"
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     UI_HOST: str = "0.0.0.0"
@@ -24,19 +24,19 @@ class Settings(BaseSettings):
 
     @property
     def IMAGES_PATH(self):
-        return os.path.join(self.MEDIA_PATH, "images")
+        return os.path.join(self.MEDIA_FOLDER, "images")
 
     @property
     def THUMBNAILS_PATH(self):
-        return os.path.join(self.MEDIA_PATH, "thumbnails")
+        return os.path.join(self.MEDIA_FOLDER, "thumbnails")
 
     @property
     def EMBEDDINGS_PATH(self):
-        return os.path.join(self.MEDIA_PATH, "embeddings")
+        return os.path.join(self.MEDIA_FOLDER, "embeddings")
 
     @property
     def MEDIA_URL(self):
-        return f'http://localhost:{self.PORT}/storage'
+        return f'http://backend:{self.PORT}/storage'
     
     @property
     def IMAGES_URL(self):

@@ -35,5 +35,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-os.makedirs(settings.MEDIA_PATH, exist_ok=True)
-app.mount("/storage", StaticFiles(directory=settings.MEDIA_PATH), name="storage")
+os.makedirs(settings.MEDIA_FOLDER, exist_ok=True)
+app.mount("/storage", StaticFiles(directory=settings.MEDIA_FOLDER), name="storage")

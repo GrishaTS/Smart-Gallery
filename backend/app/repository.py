@@ -65,29 +65,6 @@ class ImageRepository:
                 return True
             return False
     
-    @classmethod
-    async def get_images_sorted(cls, sort_by: str = 'id', order: str = 'asc') -> list[SImage]:
-        # Разрешённые поля для сортировки
-        allowed_sort_fields = {
-            'id': ImageOrm.id,
-            'uploaded_at': ImageOrm.uploaded_at,
-            'size': ImageOrm.size,
-        }
-        sort_column = allowed_sort_fields.get(sort_by, ImageOrm.id)
-        async with new_session() as session:
-            query = select(ImageOrm)
-            if order.lower() == 'desc':
-                query = query.order_by(desc(sort_column))
-            else:
-                query = query.order_by(asc(sort_column))
-            result = await session.execute(query)
-            image_models = result.scalars().all()
-            images = []
-            for image_model in image_models:
-                image_data = image_model.__dict__
-                image_data.pop('_sa_instance_state', None)
-                images.append(SImage(**image_data))
-            return images
 
     @classmethod
     async def delete_all_images(cls) -> int:

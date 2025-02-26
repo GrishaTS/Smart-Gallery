@@ -5,7 +5,6 @@ from app.repository import ImageRepository
 from app.utils.add_image import process_image
 
 router_image = APIRouter(prefix="/image", tags=["Изображение"])
-router_images = APIRouter(prefix="/images", tags=["Изображения"])
 
 @router_image.post("/", response_model=SImageId)
 async def add_image(file: UploadFile = File(...)):
@@ -18,12 +17,14 @@ async def add_image(file: UploadFile = File(...)):
     new_image_id = await ImageRepository.add_image(image_data)
     return SImageId(id=new_image_id)
 
+
 @router_image.get("/{image_id}", response_model=SImage)
 async def get_image(image_id: int):
     image = await ImageRepository.get_image_by_id(image_id)
     if not image:
         raise HTTPException(status_code=404, detail="Изображение не найдено")
     return image
+
 
 @router_image.delete("/{image_id}")
 async def delete_image(image_id: int):
@@ -32,13 +33,14 @@ async def delete_image(image_id: int):
         raise HTTPException(status_code=404, detail="Изображение не найдено")
     return {"message": "Изображение удалено"}
 
+
+router_images = APIRouter(prefix="/images", tags=["Изображения"])
+
+
 @router_images.get("/", response_model=list[SImage])
 async def get_images():
     return await ImageRepository.get_images()
 
-@router_images.get("/sorted", response_model=list[SImage])
-async def get_sorted_images(sort_by: str = "id", order: str = "asc"):
-    return await ImageRepository.get_images_sorted(sort_by, order)
 
 @router_images.delete("/")
 async def delete_all_images():

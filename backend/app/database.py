@@ -40,5 +40,5 @@ async def create_media_folders():
     os.makedirs(settings.EMBEDDINGS_PATH, exist_ok=True)
 
 async def delete_media_folders():
-    if os.path.exists(settings.MEDIA_PATH):
-        shutil.rmtree(settings.MEDIA_PATH)
+    if os.path.exists(settings.MEDIA_FOLDER):
+        shutil.rmtree(settings.MEDIA_FOLDER)

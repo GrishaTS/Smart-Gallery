@@ -17,7 +17,7 @@ def _save_thumbnail(image_path: str, preview_path: str, size=(150, 150)):
         img.thumbnail(size)
         img.save(preview_path)
 
-async def save_thumbnail(image_path: str, preview_path: str, size=(150, 150)):
+async def save_thumbnail(image_path: str, preview_path: str, size=(200, 200)):
     await run_in_threadpool(_save_thumbnail, image_path, preview_path, size)
 
 async def save_embedding(embedding_path: str):
@@ -39,10 +39,9 @@ async def process_image(file: UploadFile) -> dict:
 
     size = os.path.getsize(image_path)
 
-    image_url = os.path.join(settings.IMAGES_URL, filename + ext)
-    print(settings.IMAGES_URL, settings.IMAGES_PATH)
-    preview_url = os.path.join(settings.THUMBNAILS_URL, filename + ext)
-    embedding_url = os.path.join(settings.EMBEDDINGS_URL, f'{filename}.json')
+    image_url = os.path.join(settings.IMAGES_PATH, filename + ext)
+    preview_url = os.path.join(settings.THUMBNAILS_PATH, filename + ext)
+    embedding_url = os.path.join(settings.EMBEDDINGS_PATH, f'{filename}.json')
 
     return {
         "image_path": image_url,
