@@ -1,3 +1,4 @@
+import os
 import flet as ft
 from config import settings
 from views.home_view import HomeView
@@ -34,4 +35,5 @@ def main(page: ft.Page):
     page.go('/')
 
 if __name__ == '__main__':
-    ft.app(target=main, host=settings.HOST, port=settings.PORT, view=None)
+    os.makedirs(settings.TEMP_DIR, exist_ok=True)
+    ft.app(target=main, host=settings.HOST, port=settings.PORT, view=ft.AppView.WEB_BROWSER, upload_dir=settings.TEMP_DIR)

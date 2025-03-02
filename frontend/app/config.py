@@ -8,5 +8,6 @@ class Settings(BaseSettings):
     API_HOST: str = os.getenv("API_HOST", "backend")
     API_PORT: int = int(os.getenv("API_PORT", 8000))
     API_URL: str = f"http://{API_HOST}:{API_PORT}"
+    TEMP_DIR : str = '/frontend/temp'
 
 settings = Settings()

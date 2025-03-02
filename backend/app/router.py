@@ -1,4 +1,5 @@
 import os
+from typing import List
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from app.schemas import SImage, SImageAdd, SImageId
 from app.repository import ImageRepository
@@ -35,6 +36,22 @@ async def delete_image(image_id: int):
 
 
 router_images = APIRouter(prefix="/images", tags=["Изображения"])
+
+
+@router_images.post("/", response_model=List[SImageId])
+async def add_images(files: List[UploadFile] = File(...)):
+    print(files)
+    allowed_extensions = [".jpg", ".jpeg", ".png"]
+    image_ids = []
+    for file in files:
+        ext = os.path.splitext(file.filename)[1].lower()
+        if ext not in allowed_extensions:
+            raise HTTPException(status_code=400, detail="Ожидается изображение (jpg, png, jpeg)")
+        result = await process_image(file)
+        image_data = SImageAdd(**result)
+        new_image_id = await ImageRepository.add_image(image_data)
+        image_ids.append(SImageId(id=new_image_id))
+    return image_ids
 
 
 @router_images.get("/", response_model=list[SImage])

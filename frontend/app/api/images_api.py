@@ -1,3 +1,5 @@
+import os
+import io
 import httpx
 from functools import wraps
 from config import settings
@@ -42,5 +44,13 @@ class ImagesApi(list[ImageData]):
         image = ImageApi(image_id)
         return self[max(0, self.index(image)-n_neighbors):
                     min(len(self), self.index(image)+n_neighbors+1)]
+    
+    @staticmethod
+    def delete_images():
+        with httpx.Client(http1=True) as client:
+            response = client.delete(f'{settings.API_URL}/images/')
+            if response.status_code == 200:
+                return response.json()
+        return {}
 
 images_api = ImagesApi()

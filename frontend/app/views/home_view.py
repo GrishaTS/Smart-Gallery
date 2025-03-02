@@ -9,4 +9,4 @@ class HomeView(BaseView):
         self.assemble_page()
 
     def assemble_page(self):
-        self.controls = [ft.TextButton('/images', on_click=lambda e: self.page.go('/images'))]
+        self.controls = [ft.Text('Описание проекта и ссылка главную страницу'), ft.TextButton('/images', on_click=lambda e: self.page.go('/images'))]

@@ -55,6 +55,6 @@ class BaseView(ft.View, ABC):
             title=ft.Text(spans=[span]),
             center_title=False,
             actions=[
-                ft.IconButton(ft.icons.BRIGHTNESS_4, on_click=toggle_theme, tooltip='Переключить тему'),
+                ft.IconButton(ft.Icons.BRIGHTNESS_4, on_click=toggle_theme, tooltip='Переключить тему'),
             ],
         )
