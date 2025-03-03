@@ -11,9 +11,20 @@ class ImageView(BaseView):
         super().__init__(page)
         self.image_id = image_id
         self.image_api = ImageApi(self.image_id)
+
+        self.img = self.image_api.get_image()
+        n_neighbors_images = images_api.get_n_neighbors(self.image_id, 1)
+        image_index = n_neighbors_images.index(self.img)
+        self.prev_image, self.next_image = None, None
+        if image_index > 0:
+            self.prev_image = n_neighbors_images[image_index - 1]
+        if image_index < len(n_neighbors_images) - 1:
+            self.next_image = n_neighbors_images[image_index + 1]
+        
         self.assemble_page()
 
     def assemble_page(self):
+        self.page.on_keyboard_event = self.tap_on_key
         self.expand_app_bar()
         self.scroller = ft.Row(
             spacing=10,
@@ -26,6 +37,12 @@ class ImageView(BaseView):
                          self.scroller]
         self.load_scroller_images()
     
+    def tap_on_key(self, e: ft.KeyboardEvent):
+        if e.key == 'Arrow Left' and self.prev_image:
+            self.page.go(f'/image/{self.prev_image.id}')
+        elif e.key == 'Arrow Right' and self.next_image:
+            self.page.go(f'/image/{self.next_image.id}')
+
     def tap_on_screen(self, e: ft.TapEvent, img):
         dlg = ft.AlertDialog(
             content=ft.Container(
@@ -51,32 +68,24 @@ class ImageView(BaseView):
         self.page.update()
 
     def get_image(self):
-        img = self.image_api.get_image()
-        n_neighbors_images = images_api.get_n_neighbors(self.image_id, 1)
-        image_index = n_neighbors_images.index(img)
-        prev_image, next_image = None, None
-        if image_index > 0:
-            prev_image = n_neighbors_images[image_index - 1]
-        if image_index < len(n_neighbors_images) - 1:
-            next_image = n_neighbors_images[image_index + 1]
         return ft.Row(
             [
                 ft.Container(
                     ft.IconButton(
                         icon=ft.Icons.ARROW_BACK,
                         expand=True,
-                        disabled=prev_image,
-                        on_click=lambda e: self.page.go(f'/image/{prev_image.id}'),
-                    ) if prev_image else None,
+                        disabled=self.prev_image,
+                        on_click=lambda e: self.page.go(f'/image/{self.prev_image.id}'),
+                    ) if self.prev_image else None,
                 ),
                 ft.Container(
                     ft.GestureDetector(
                         ft.Container(
-                            ft.Image(src=img.img_to_base64(img.image_path), fit="contain"),
+                            ft.Image(src=self.img.img_to_base64(self.img.image_path), fit='contain'),
                             disabled=False,
                             alignment=ft.alignment.center
                         ),
-                        on_tap_down=lambda e: self.tap_on_screen(e, img),
+                        on_tap_down=lambda e: self.tap_on_screen(e, self.img),
                     ),
                     expand=True
                 ),
@@ -84,9 +93,9 @@ class ImageView(BaseView):
                     ft.IconButton(
                         icon=ft.Icons.ARROW_FORWARD,
                         expand=True,
-                        disabled=next_image,
-                        on_click=lambda e: self.page.go(f'/image/{next_image.id}'),
-                    ) if next_image else None,
+                        disabled=self.next_image,
+                        on_click=lambda e: self.page.go(f'/image/{self.next_image.id}'),
+                    ) if self.next_image else None,
                 ),
             ],
             expand=True,

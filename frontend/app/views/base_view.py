@@ -31,7 +31,7 @@ class BaseView(ft.View, ABC):
     def add_nav_bar(self):
         self.navigation_bar = ft.NavigationBar(
             destinations=[
-                ft.NavigationBarDestination(icon=cls_view.NAV_BAR_ICON, label=cls_view.NAV_BAR_LABEL)
+                ft.NavigationBarDestination(icon=cls_view.NAV_BAR_ICON, label=cls_view.NAV_BAR_LABEL, tooltip='')
                 for cls_view in self.nav_bar_classes
             ],
             on_change=lambda e: self.page.go(self.nav_bar_classes[e.control.selected_index].ROUTE),
