@@ -1,6 +1,7 @@
 import os
 import flet as ft
 from pydantic_settings import BaseSettings
+from dataclasses import dataclass
 
 class Settings(BaseSettings):
     HOST: str = "0.0.0.0"

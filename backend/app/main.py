@@ -22,6 +22,7 @@ async def lifespan(app: FastAPI):
     await delete_media_folders()
     print('База очищена')
 
+print('Start compose')
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(router_image)
@@ -29,7 +30,7 @@ app.include_router(router_images)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.UI_URL],
+    allow_origins=[settings.UI_URLS],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

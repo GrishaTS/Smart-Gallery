@@ -1,8 +1,9 @@
+import io
 import os
 import httpx
 from functools import wraps
 from config import settings
-from utils.image_data import ImageData
+from data import ImageData
 from .image_api import ImageApi
 
 
@@ -46,6 +47,27 @@ class ImagesApi:
             if response.status_code == 200:
                 return response.json()
             return {}
+        
+    @staticmethod
+    def post_images(file_names: list[str]) -> list:
+        files = []
+        for file_name in file_names:
+            file_path = os.path.join(settings.TEMP_DIR, file_name)
+            ext = os.path.splitext(file_name)[1].lower()
+            if os.path.exists(file_path):
+                with open(file_path, 'rb') as file:
+                    files.append(('files', (file_name, io.BytesIO(file.read()), f'image/{ext[1:]}')))
+        if files:
+            with httpx.Client(http1=True) as client:
+                response = client.post(f'{settings.API_URL}/images/', files=files)
+                if response.status_code == 200:
+                    for file_name in file_names:
+                        file_path = os.path.join(settings.TEMP_DIR, file_name)
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                    return response.json()
+        
+        return []
 
 
 images_api = ImagesApi()

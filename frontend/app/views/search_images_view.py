@@ -3,12 +3,13 @@ import uuid
 import flet as ft
 from api import images_api, ImageApi
 from .base_view import BaseView
+from routes import ViewRoutes
 from .mixins import AppBarMixin, GridMixin, NavBarMixin
 
 class SearchImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
-    ROUTE = '/search'
+    ROUTE = ViewRoutes.SEARCH_IMAGES
 
-    APP_BAR_TITLE_ROUTE = '/'
+    APP_BAR_TITLE_ROUTE = ViewRoutes.HOME
     APP_BAR_THEME = True
     APP_BAR_SEARCH = True
     
@@ -42,7 +43,7 @@ class SearchImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
             content=ft.TextField(
             label="Поиск изображений по описанию",
             border_color='blue', border_width=1, focused_border_width=3,
-            # on_change=on_text_change,
+            on_submit=..., # поиск
         ),
             alignment=ft.alignment.center,
             padding=100

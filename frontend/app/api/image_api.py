@@ -2,7 +2,7 @@ import io
 import os
 import httpx
 from config import settings
-from utils.image_data import ImageData
+from data import ImageData
 
 class ImageApi:
     @staticmethod

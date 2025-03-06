@@ -1,6 +1,6 @@
 import flet as ft
 from abc import ABC, abstractmethod
-from utils.image_data import ImageData
+from data import ImageData
 
 class GridMixin(ABC):
     GRID_SELECTION_MODE = False
@@ -16,7 +16,8 @@ class GridMixin(ABC):
         ...
 
     def load_grid(self, update=True):
-        self.grid.controls.clear()
+        if update:
+            self.grid.clean()
         images = self.get_images()
         if self.GRID_SELECTION_MODE:
             if not hasattr(self, 'add_selection_image'):

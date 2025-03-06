@@ -4,7 +4,7 @@ class AppBarMixin:
     APP_BAR_TITLE_ROUTE: str = None
     APP_BAR_THEME: bool = True
     APP_BAR_CONFIRM_DELETION: bool = False
-    APP_BAR_DELETE_ALL: bool = False
+    APP_BAR_DELETE: bool = False
     APP_BAR_SORTING: bool = False
     APP_BAR_UPLOAD: bool = False
 
@@ -18,7 +18,7 @@ class AppBarMixin:
         self.add_title()
         if self.APP_BAR_CONFIRM_DELETION:
             self.add_confirm_deletion_button()
-        if self.APP_BAR_DELETE_ALL:
+        if self.APP_BAR_DELETE:
             self.add_delete_button()
         if self.APP_BAR_UPLOAD:
             self.add_upload_button()
@@ -71,6 +71,8 @@ class AppBarMixin:
             raise AttributeError('on_files_picked не инициализирована')
         if not hasattr(self, 'on_files_upload'):
             raise AttributeError('on_files_upload не инициализирована')
+        self.progress_ring = ft.ProgressRing(value=0)
+        self.container_progress_ring = ft.Container(self.progress_ring, alignment=ft.alignment.center)
         self.file_picker = ft.FilePicker(on_result=self.on_files_picked, on_upload=self.on_files_upload)
         self.page.overlay.append(self.file_picker)
         self.actions.append(ft.IconButton(
@@ -86,7 +88,7 @@ class AppBarMixin:
         self.delete_button = ft.IconButton(
             icon=ft.Icons.DELETE,
             on_click=lambda e: self.delete(),
-            tooltip='Удалить все'
+            tooltip='Удалить'
         )
         self.actions.append(self.delete_button)
 
@@ -106,5 +108,3 @@ class AppBarMixin:
             disabled=True
         )
         self.actions.append(self.confirm_deletion_button)
-
-

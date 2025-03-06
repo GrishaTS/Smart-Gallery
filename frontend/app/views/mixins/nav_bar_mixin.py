@@ -1,5 +1,4 @@
 import flet as ft
-from views.base_view import BaseView
 
 class NavBarMixin:
     NAV_BAR_POS: int

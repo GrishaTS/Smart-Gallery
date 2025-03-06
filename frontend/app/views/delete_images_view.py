@@ -1,17 +1,16 @@
-import os
-import uuid
 import flet as ft
 from api import images_api, ImageApi
 from .base_view import BaseView
+from routes import ViewRoutes
 from .mixins import AppBarMixin, GridMixin, NavBarMixin
 
 class DeleteImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
-    ROUTE = '/delete'
+    ROUTE = ViewRoutes.DELETE_IMAGES
 
-    APP_BAR_TITLE_ROUTE = '/'
+    APP_BAR_TITLE_ROUTE = ViewRoutes.HOME
     APP_BAR_THEME = True
     APP_BAR_SORTING = True
-    APP_BAR_DELETE_ALL = True
+    APP_BAR_DELETE = True
     APP_BAR_CONFIRM_DELETION = True
 
     NAV_BAR_POS = 2
@@ -47,7 +46,7 @@ class DeleteImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
             self.selected_images_id = []
             self.load_grid()
             dialog.open = False
-            self.page.go('/images')
+            self.page.go(ViewRoutes.IMAGES)
 
         dialog = ft.AlertDialog(
             title=ft.Text("Удаление всех изображений"),

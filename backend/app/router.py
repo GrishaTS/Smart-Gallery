@@ -40,7 +40,6 @@ router_images = APIRouter(prefix="/images", tags=["Изображения"])
 
 @router_images.post("/", response_model=List[SImageId])
 async def add_images(files: List[UploadFile] = File(...)):
-    print(files)
     allowed_extensions = [".jpg", ".jpeg", ".png"]
     image_ids = []
     for file in files:

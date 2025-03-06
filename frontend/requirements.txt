@@ -1,4 +1,4 @@
-flet==0.26.0
+flet[web]==0.26.0
 httpx==0.28.1
 pydantic-settings==2.7.1
 websockets==15.0

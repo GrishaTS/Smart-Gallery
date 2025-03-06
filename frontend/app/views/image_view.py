@@ -1,48 +1,53 @@
 import flet as ft
-from api.image_api import ImageApi
-from api.images_api import images_api
+from api import images_api, ImageApi
 from .base_view import BaseView
-from utils.image_data import ImageData
+from routes import ViewRoutes
+from .mixins import AppBarMixin
+from data import ImageData
 
-class ImageView(BaseView):
-    ROUTE = '/image/:image_id'
-    APP_BAR_TITLE_ROUTE = '/images'
+class ImageView(BaseView, AppBarMixin):
+    ROUTE = ViewRoutes.IMAGE
 
-    def __init__(self, page: ft.Page, image_id: int):
+    APP_BAR_TITLE_ROUTE = ViewRoutes.IMAGES
+    APP_BAR_THEME = True
+    APP_BAR_DELETE = True
+
+    def __init__(self, page: ft.Page, image_id):
         super().__init__(page)
-        self.img = ImageApi.fetch_image(image_id)
-
-        n_neighbors_images = images_api.get_n_neighbors(self.img.id, 1)
-        image_index = n_neighbors_images.index(self.img)
+        self.n_neighbors = int((self.page.width / 100 - 1) / 2)
+        self.init_images(image_id)
+        self.assemble_page()
+    
+    def init_images(self, image_id):
+        self.cur_imgage = ImageApi.fetch_image(image_id)
+        self.n_neighbors_images = images_api.get_n_neighbors(self.cur_imgage.id, self.n_neighbors)
+        image_index = self.n_neighbors_images.index(self.cur_imgage)
         self.prev_image, self.next_image = None, None
         if image_index > 0:
-            self.prev_image = n_neighbors_images[image_index - 1]
-        if image_index < len(n_neighbors_images) - 1:
-            self.next_image = n_neighbors_images[image_index + 1]
-        
-        self.assemble_page()
-
+            self.prev_image = self.n_neighbors_images[image_index - 1]
+        if image_index < len(self.n_neighbors_images) - 1:
+            self.next_image = self.n_neighbors_images[image_index + 1]
+    
     def assemble_page(self):
+        self.app_bar()
         self.page.on_keyboard_event = self.tap_on_key
-        self.expand_app_bar()
+        self.page.on_resized = self.update_n_neighbors
         self.scroller = ft.Row(
             spacing=10,
             wrap=False,
             alignment=ft.MainAxisAlignment.CENTER,
         )
-        self.n_neighbors = int((self.page.width / 100 - 1) / 2)
-        self.page.on_resized = self.update_n_neighbors
         self.controls = [self.get_image(),
                          self.scroller]
-        self.load_scroller_images()
+        self.load_scroller_images(update=False)
     
     def tap_on_key(self, e: ft.KeyboardEvent):
         if e.key == 'Arrow Left' and self.prev_image:
-            self.page.go(f'/image/{self.prev_image.id}')
+            self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.prev_image.id))
         elif e.key == 'Arrow Right' and self.next_image:
-            self.page.go(f'/image/{self.next_image.id}')
+            self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.next_image.id))
 
-    def tap_on_screen(self, e: ft.TapEvent, img: ImageData):
+    def tap_on_image(self, e: ft.TapEvent, img: ImageData):
         dlg = ft.AlertDialog(
             content=ft.Container(
                 content=ft.Image(
@@ -60,11 +65,10 @@ class ImageView(BaseView):
             action_button_padding=0
         )
         self.page.open(dlg)
-
+    
     def update_n_neighbors(self, *_):
         self.n_neighbors = int((self.page.width / 100 - 1) / 2)
         self.load_scroller_images()
-        self.page.update()
 
     def get_image(self):
         return ft.Row(
@@ -74,18 +78,13 @@ class ImageView(BaseView):
                         icon=ft.Icons.ARROW_BACK,
                         expand=True,
                         disabled=self.prev_image,
-                        on_click=lambda e: self.page.go(f'/image/{self.prev_image.id}'),
+                        on_click=lambda e: self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.prev_image.id)),
                     ) if self.prev_image else None,
                 ),
                 ft.Container(
-                    ft.GestureDetector(
-                        ft.Container(
-                            ft.Image(src=self.img.img_to_base64(self.img.image_path), fit='contain'),
-                            disabled=False,
-                            alignment=ft.alignment.center
-                        ),
-                        on_tap_down=lambda e: self.tap_on_screen(e, self.img),
-                    ),
+                    content=ft.Image(src=self.cur_imgage.img_to_base64(self.cur_imgage.image_path), fit='contain'),
+                    alignment=ft.alignment.center,
+                    on_click=lambda e: self.tap_on_image(e, self.cur_imgage),
                     expand=True
                 ),
                 ft.Container(
@@ -93,7 +92,7 @@ class ImageView(BaseView):
                         icon=ft.Icons.ARROW_FORWARD,
                         expand=True,
                         disabled=self.next_image,
-                        on_click=lambda e: self.page.go(f'/image/{self.next_image.id}'),
+                        on_click=lambda e: self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.next_image.id)),
                     ) if self.next_image else None,
                 ),
             ],
@@ -101,17 +100,17 @@ class ImageView(BaseView):
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
         )
 
-    def load_scroller_images(self):
-        self.scroller.controls.clear()
-        n_neighbors_images = images_api.get_n_neighbors(self.img.id, self.n_neighbors)
-        selected_index = n_neighbors_images.index(self.img)
+    def load_scroller_images(self, update=True):
+        if update:
+            self.scroller.clean()
+        selected_index = self.n_neighbors_images.index(self.cur_imgage)
         left_padding = max(0, self.n_neighbors - selected_index)
-        right_padding = max(0, self.n_neighbors - (len(n_neighbors_images) - selected_index) + 1)
+        right_padding = max(0, self.n_neighbors - (len(self.n_neighbors_images) - selected_index) + 1)
 
         self.scroller.controls.extend([ft.Container(width=70, height=70)] * left_padding)
 
-        for img in n_neighbors_images:
-            is_selected = self.img == img
+        for img in self.n_neighbors_images:
+            is_selected = self.cur_imgage == img
             self.scroller.controls.append(
                 ft.Container(
                     content=ft.Image(
@@ -121,7 +120,7 @@ class ImageView(BaseView):
                         border_radius=5,
                         fit='cover',
                     ),
-                    on_click=lambda _, image_id=img.id: self.page.go(f'/image/{image_id}'),
+                    on_click=lambda _, image_id=img.id: self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=image_id)),
                     disabled=is_selected,
                     tooltip=f'{img.uploaded_at}\n{img.size} байт',
                     border=ft.border.all(3, ft.colors.BLUE) if is_selected else None,
@@ -130,21 +129,15 @@ class ImageView(BaseView):
                 )
             )
         self.scroller.controls.extend([ft.Container(width=70, height=70, padding=5)] * right_padding)
+        if update:
+            self.scroller.update()
     
-    def expand_app_bar(self):
-        def delete_image(_):
-            n_neighbors_images = images_api.get_n_neighbors(self.img.id, 1)
-            image_index = n_neighbors_images.index(self.img)
-            ImageApi.delete_image(self.img.id)
-            if image_index > 0:
-                self.page.go(f'/image/{n_neighbors_images[image_index-1].id}')
-            elif image_index < len(n_neighbors_images) - 1:
-                self.page.go(f'/image/{n_neighbors_images[image_index+1].id}')
-            else:
-                self.page.go(f'/images')
+    def delete(self):
+        ImageApi.delete_image(self.cur_imgage.id)
+        if self.prev_image:
+            self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.prev_image.id))
+        elif self.next_image:
+            self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.next_image.id))
+        else:
+            self.page.go(ViewRoutes.IMAGES)
 
-        self.appbar.actions.insert(0, ft.IconButton(
-            ft.icons.DELETE,
-            on_click=delete_image,
-            tooltip='Удалить'
-        ))
