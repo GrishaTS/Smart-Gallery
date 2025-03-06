@@ -1,11 +1,12 @@
 import os
 import flet as ft
 from config import settings
-from views.home_view import HomeView
-from views.images_view import ImagesView
-from views.image_view import ImageView
-from views.delete_images_view import DeleteImagesView
-from views.search_images_view import SearchImagesView
+from views import (
+    HomeView,
+    ImagesView,
+    SearchImagesView,
+    DeleteImagesView
+)
 
 def main(page: ft.Page):
     page.title = 'Умная галерея'
@@ -21,12 +22,12 @@ def main(page: ft.Page):
             page.views.append(HomeView(page))
         elif troute.match(ImagesView.ROUTE):
             page.views.append(ImagesView(page))
-        elif troute.match(ImageView.ROUTE):
-            page.views.append(ImageView(page, troute.image_id))
-        elif troute.match(DeleteImagesView.ROUTE):
-            page.views.append(DeleteImagesView(page))
         elif troute.match(SearchImagesView.ROUTE):
             page.views.append(SearchImagesView(page))
+        # elif troute.match(ImageView.ROUTE):
+        #     page.views.append(ImageView(page, troute.image_id))
+        elif troute.match(DeleteImagesView.ROUTE):
+            page.views.append(DeleteImagesView(page))
         else:
             page.views.append(HomeView(page))
         page.update()

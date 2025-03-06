@@ -1,7 +1,8 @@
 import flet as ft
 from .base_view import BaseView
+from .mixins import AppBarMixin
 
-class HomeView(BaseView):
+class HomeView(BaseView, AppBarMixin):
     ROUTE = '/'
 
     def __init__(self, page: ft.Page):
@@ -9,4 +10,6 @@ class HomeView(BaseView):
         self.assemble_page()
 
     def assemble_page(self):
-        self.controls = [ft.Text('Описание проекта и ссылка главную страницу'), ft.TextButton('/images', on_click=lambda e: self.page.go('/images'))]
+        self.app_bar()
+        self.controls = [ft.Text('Описание проекта и ссылка главную страницу'),
+                         ft.TextButton('/images', on_click=lambda e: self.page.go('/images'))]
