@@ -1,13 +1,12 @@
 import os
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.database import create_tables, delete_tables, create_media_folders, delete_media_folders
-from app.router import router_image ,router_images
+from app.router import router_health, router_image ,router_images
 from app.config import settings
 
 
@@ -22,15 +21,16 @@ async def lifespan(app: FastAPI):
     await delete_media_folders()
     print('База очищена')
 
-print('Start compose')
+print(f'Start compose on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}')
 app = FastAPI(lifespan=lifespan)
 
+app.include_router(router_health)
 app.include_router(router_image)
 app.include_router(router_images)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.UI_URLS],
+    allow_origins=[settings.FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

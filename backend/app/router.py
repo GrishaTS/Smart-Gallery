@@ -5,6 +5,12 @@ from app.schemas import SImage, SImageAdd, SImageId
 from app.repository import ImageRepository
 from app.utils.add_image import process_image
 
+router_health = APIRouter(prefix="/health", tags=["Изображение"])
+
+@router_health.get("/", tags=['Работоспособность'])
+def health_check():
+    return {"status": "ok"}
+
 router_image = APIRouter(prefix="/image", tags=["Изображение"])
 
 @router_image.post("/", response_model=SImageId)

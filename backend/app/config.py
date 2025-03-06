@@ -1,24 +1,30 @@
 import os
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import ClassVar
+
+
+import os
+print("ENV VARIABLES IN CONTAINER:")
+for key in ["DB_NAME", "MEDIA_FOLDER", "BACKEND_HOST", "BACKEND_PORT", "FRONTEND_HOST", "FRONTEND_PORT"]:
+    print(f"{key}={os.getenv(key)}")
+
+
 
 class Settings(BaseSettings):
-    DB_NAME: str = 'gallery'
-    MEDIA_FOLDER: str = 'storage'
-    HOST: str = '0.0.0.0'
-    PORT: int = 8000
-    LOCAL_HOST = 'localhost'
-    UI_HOST = '0.0.0.0'
-    UI_PORT: int = 3000
-    DOCKER_HOST: str = 'backend'
+    DB_NAME: str
+    MEDIA_FOLDER: str
+    BACKEND_HOST: str
+    BACKEND_PORT: int
+    FRONTEND_HOST: str
+    FRONTEND_PORT: int
 
     @property
-    def UI_URLS(self):
-        return [f'http://{self.UI_HOST}:{self.UI_PORT}',
-                f'http://{self.LOCAL_HOST}:{self.UI_PORT}']
+    def FRONTEND_URL(self):
+        return f'http://{self.FRONTEND_HOST}:{self.FRONTEND_PORT}'
 
     @property
-    def API_URL(self):
-        return f'http://{self.HOST}:{self.PORT}'
+    def BACKEND_URL(self):
+        return f'http://{self.BACKEND_HOST}:{self.BACKEND_PORT}'
     
     @property
     def DATABASE_URL(self):
@@ -38,7 +44,7 @@ class Settings(BaseSettings):
 
     @property
     def MEDIA_URL(self):
-        return f'http://backend:{self.PORT}/storage'
+        return f'http://{self.BACKEND_HOST}:{self.BACKEND_PORT}/{self.MEDIA_FOLDER}'
     
     @property
     def IMAGES_URL(self):
@@ -51,6 +57,5 @@ class Settings(BaseSettings):
     @property
     def EMBEDDINGS_URL(self):
         return os.path.join(self.MEDIA_URL, 'embeddings')
-
-
+    
 settings = Settings()

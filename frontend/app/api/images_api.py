@@ -16,7 +16,7 @@ class ImagesApi:
     @staticmethod
     def fetch_images() -> list[ImageData]:
         with httpx.Client(http1=True) as client:
-            response = client.get(f'{settings.API_URL}/images/')
+            response = client.get(f'{settings.BACKEND_URL}/images/')
             if response.status_code == 200:
                 return [ImageData(**x) for x in response.json()]
         return []
@@ -43,7 +43,7 @@ class ImagesApi:
     @staticmethod
     def delete_images():
         with httpx.Client(http1=True) as client:
-            response = client.delete(f'{settings.API_URL}/images/')
+            response = client.delete(f'{settings.BACKEND_URL}/images/')
             if response.status_code == 200:
                 return response.json()
             return {}
@@ -59,7 +59,7 @@ class ImagesApi:
                     files.append(('files', (file_name, io.BytesIO(file.read()), f'image/{ext[1:]}')))
         if files:
             with httpx.Client(http1=True) as client:
-                response = client.post(f'{settings.API_URL}/images/', files=files)
+                response = client.post(f'{settings.BACKEND_URL}/images/', files=files)
                 if response.status_code == 200:
                     for file_name in file_names:
                         file_path = os.path.join(settings.TEMP_DIR, file_name)

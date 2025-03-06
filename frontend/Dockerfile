@@ -1,20 +1,12 @@
-FROM python:3.12-alpine
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /frontend
 
-RUN apk add --no-cache \
-    gtk+3.0 \
-    libx11 \
-    gstreamer \
-    gst-plugins-good \
-    gst-plugins-bad \
-    gst-plugins-base \
-    ffmpeg \
-    bash \
-    libmagic
-
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONUNBUFFERED=1
 
 ENV FLET_SECRET_KEY="secret_key"
 

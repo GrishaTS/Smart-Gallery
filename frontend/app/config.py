@@ -1,14 +1,17 @@
 import os
 import flet as ft
-from pydantic_settings import BaseSettings
-from dataclasses import dataclass
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import ClassVar
 
 class Settings(BaseSettings):
-    HOST: str = "0.0.0.0"
-    PORT: int = 3000
-    API_HOST: str = os.getenv("API_HOST", "backend")
-    API_PORT: int = int(os.getenv("API_PORT", 8000))
-    API_URL: str = f"http://{API_HOST}:{API_PORT}"
-    TEMP_DIR : str = '/frontend/temp'
+    FRONTEND_HOST: str
+    FRONTEND_PORT: int
+    BACKEND_HOST: str
+    BACKEND_PORT: int
+    TEMP_DIR : ClassVar[str] = '/frontend/temp'
+
+    @property
+    def BACKEND_URL(self) -> str:
+        return f"http://{self.BACKEND_HOST}:{self.BACKEND_PORT}"
 
 settings = Settings()
