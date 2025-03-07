@@ -34,9 +34,8 @@ class ImagesApi:
         self.sort_by = sort_by
         self.descending = not self.descending
     
-    def get_n_neighbors(self, image_id, n_neighbors) -> list[ImageData]:
+    def get_n_neighbors(self, image: ImageData, n_neighbors) -> list[ImageData]:
         self.update_images()
-        image = ImageApi.fetch_image(image_id)
         index = self.images.index(image)
         return self.images[max(0, index - n_neighbors):min(len(self.images), index + n_neighbors + 1)]
 

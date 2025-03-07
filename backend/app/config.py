@@ -3,13 +3,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import ClassVar
 
 
-import os
-print("ENV VARIABLES IN CONTAINER:")
-for key in ["DB_NAME", "MEDIA_FOLDER", "BACKEND_HOST", "BACKEND_PORT", "FRONTEND_HOST", "FRONTEND_PORT"]:
-    print(f"{key}={os.getenv(key)}")
-
-
-
 class Settings(BaseSettings):
     DB_NAME: str
     MEDIA_FOLDER: str

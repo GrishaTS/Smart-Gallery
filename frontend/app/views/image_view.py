@@ -20,7 +20,7 @@ class ImageView(BaseView, AppBarMixin):
     
     def init_images(self, image_id):
         self.cur_imgage = ImageApi.fetch_image(image_id)
-        self.n_neighbors_images = images_api.get_n_neighbors(self.cur_imgage.id, self.n_neighbors)
+        self.n_neighbors_images = images_api.get_n_neighbors(self.cur_imgage, self.n_neighbors)
         image_index = self.n_neighbors_images.index(self.cur_imgage)
         self.prev_image, self.next_image = None, None
         if image_index > 0:
