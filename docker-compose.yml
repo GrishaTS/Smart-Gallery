@@ -3,26 +3,57 @@ networks:
     driver: bridge
 
 volumes:
-  gallery_storage:
+  storage:
+  db_data:
 
 services:
+  db:
+    image: postgres:15
+    container_name: db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - dev
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./backend
     restart: unless-stopped
+    container_name: backend
     environment:
       FRONTEND_HOST: ${FRONTEND_HOST}
       FRONTEND_PORT: ${FRONTEND_PORT}
       BACKEND_HOST: ${BACKEND_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
       MEDIA_FOLDER: ${MEDIA_FOLDER}
-      DB_NAME: ${DB_NAME}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     volumes:
-      - gallery_storage:/${BACKEND_HOST}/${MEDIA_FOLDER}
+      - storage:/${BACKEND_HOST}/${MEDIA_FOLDER}
     networks:
       - dev
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${BACKEND_HOST}:${BACKEND_PORT}/health/"]
       interval: 1h
@@ -34,6 +65,7 @@ services:
     build:
       context: ./frontend
     restart: unless-stopped
+    container_name: frontend
     environment:
       FRONTEND_HOST: ${FRONTEND_HOST}
       FRONTEND_PORT: ${FRONTEND_PORT}
@@ -43,7 +75,7 @@ services:
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     volumes:
-      - gallery_storage:/${FRONTEND_HOST}/${MEDIA_FOLDER}
+      - storage:/${FRONTEND_HOST}/${MEDIA_FOLDER}
     networks:
       - dev
     depends_on:
@@ -58,6 +90,7 @@ services:
 
   nginx:
     image: nginx:stable-alpine
+    container_name: nginx
     restart: unless-stopped
     environment:
       - MEDIA_FOLDER=${MEDIA_FOLDER}
@@ -67,7 +100,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt
-      - gallery_storage:/${MEDIA_FOLDER}
+      - storage:/${MEDIA_FOLDER}
     networks:
       - dev
     depends_on:

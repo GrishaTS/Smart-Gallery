@@ -1,15 +1,18 @@
 import os
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import ClassVar
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DB_NAME: str
     MEDIA_FOLDER: str
     BACKEND_HOST: str
     BACKEND_PORT: int
     FRONTEND_HOST: str
     FRONTEND_PORT: int
+    POSTGRES_DB: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: int
 
     @property
     def FRONTEND_URL(self):
@@ -20,8 +23,8 @@ class Settings(BaseSettings):
         return f'http://{self.BACKEND_HOST}:{self.BACKEND_PORT}'
     
     @property
-    def DATABASE_URL(self):
-        return f'sqlite+aiosqlite:///{self.DB_NAME}.db'
+    def POSTGRES_URL(self):
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     @property
     def IMAGES_PATH(self):
