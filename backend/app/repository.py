@@ -80,5 +80,4 @@ class ImageRepository:
             similarity = cosine_similarity(text_emb, image_emb)
             if similarity >= settings.CLIP_THRESHOLD:
                 filtered_images.append(SImage.model_validate(image))
-
         return filtered_images

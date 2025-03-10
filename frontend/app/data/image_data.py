@@ -14,8 +14,8 @@ class ImageData:
     size: int = None
 
     def __post_init__(self):
-        if isinstance(self.uploaded_at, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}', self.uploaded_at):
-            self.uploaded_at = datetime.strptime(self.uploaded_at, '%Y-%m-%dT%H:%M:%S')
+        if isinstance(self.uploaded_at, str) and re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{6}', self.uploaded_at):
+            self.uploaded_at = datetime.strptime(self.uploaded_at, '%Y-%m-%dT%H:%M:%S.%f')
         else:
             self.uploaded_at = None
 
