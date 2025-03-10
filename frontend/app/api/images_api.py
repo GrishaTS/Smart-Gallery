@@ -29,6 +29,13 @@ class ImagesApi:
     def get_images(self) -> list[ImageData]:
         self.update_images()
         return self.images
+    
+    def search_images(self, prompt):
+        with httpx.Client(http1=True) as client:
+            response = client.get(f'{settings.BACKEND_URL}/images/search/{prompt}')
+            if response.status_code == 200:
+                return [ImageData(**x) for x in response.json()]
+        return []
 
     def set_sorting(self, sort_by):
         self.sort_by = sort_by

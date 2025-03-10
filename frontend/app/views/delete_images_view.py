@@ -65,6 +65,7 @@ class DeleteImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
         self.selected_images_id = []
         self.confirm_deletion_button.disabled = True
         self.confirm_deletion_button.bgcolor = ft.colors.RED_200
+        self.confirm_deletion_button.update()
         self.load_grid()
     
     def add_selection_image(self, image_id):

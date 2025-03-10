@@ -4,48 +4,51 @@ import json
 from fastapi import UploadFile
 from PIL import Image
 import aiofiles
-from fastapi.concurrency import run_in_threadpool
+import asyncio
 from app.config import settings
+from app.api import get_image_embedding
 
-async def save_image(file: UploadFile, image_path: str):
-    contents = await file.read()
+async def save_image(file: UploadFile, image_path: str) -> None:
+    """Сохраняет загруженное изображение асинхронно."""
     async with aiofiles.open(image_path, 'wb') as f:
-        await f.write(contents)
+        await f.write(await file.read())
 
-def _save_thumbnail(image_path: str, preview_path: str, size=(150, 150)):
+def _create_thumbnail(image_path: str, preview_path: str, size: tuple[int, int] = (200, 200)) -> None:
+    """Создает и сохраняет уменьшенную версию изображения."""
     with Image.open(image_path) as img:
         img.thumbnail(size)
         img.save(preview_path)
 
-async def save_thumbnail(image_path: str, preview_path: str, size=(200, 200)):
-    await run_in_threadpool(_save_thumbnail, image_path, preview_path, size)
+async def save_thumbnail(image_path: str, preview_path: str, size: tuple[int, int] = (200, 200)) -> None:
+    """Асинхронно создает миниатюру изображения."""
+    await asyncio.to_thread(_create_thumbnail, image_path, preview_path, size)
 
-async def save_embedding(embedding_path: str):
-    embedding = [1, 2, 3]
+async def save_embedding(embedding_path: str, image_path: str) -> None:
+    """Создает и сохраняет фиктивный эмбеддинг."""
+    embedding = await get_image_embedding(image_path)
     async with aiofiles.open(embedding_path, 'w') as f:
         await f.write(json.dumps(embedding))
 
-async def process_image(file: UploadFile) -> dict:
-    filename = str(uuid.uuid4())
-    ext = os.path.splitext(file.filename)[1]
 
-    image_path = os.path.join(settings.IMAGES_PATH, filename + ext)
-    preview_path = os.path.join(settings.THUMBNAILS_PATH, filename + ext)
-    embedding_path = os.path.join(settings.EMBEDDINGS_PATH, f'{filename}.json')
+async def process_image(file: UploadFile) -> dict:
+    """Обрабатывает загруженное изображение: сохраняет оригинал, миниатюру и эмбеддинг."""
+    filename = f"{uuid.uuid4()}{os.path.splitext(file.filename)[1]}"
+    
+    image_path = os.path.join(settings.IMAGES_PATH, filename)
+    preview_path = os.path.join(settings.THUMBNAILS_PATH, filename)
+    embedding_path = os.path.join(settings.EMBEDDINGS_PATH, f"{filename}.json")
 
     await save_image(file, image_path)
-    await save_thumbnail(image_path, preview_path)
-    await save_embedding(embedding_path)
+    await asyncio.gather(
+        save_thumbnail(image_path, preview_path),
+        save_embedding(embedding_path, image_path)
+    )
 
     size = os.path.getsize(image_path)
 
-    image_url = os.path.join(settings.IMAGES_PATH, filename + ext)
-    preview_url = os.path.join(settings.THUMBNAILS_PATH, filename + ext)
-    embedding_url = os.path.join(settings.EMBEDDINGS_PATH, f'{filename}.json')
-
     return {
-        "image_path": image_url,
-        "preview_path": preview_url,
-        "embedding_path": embedding_url,
+        "image_path": image_path,
+        "preview_path": preview_path,
+        "embedding_path": embedding_path,
         "size": size
     }
