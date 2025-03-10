@@ -7,6 +7,28 @@ volumes:
   db_data:
 
 services:
+  ml_api:
+    build:
+      context: ./ml_api
+    restart: unless-stopped
+    container_name: ml_api
+    environment:
+      ML_API_HOST: ${ML_API_HOST}
+      ML_API_PORT: ${ML_API_PORT}
+      ML_API_MODEL: ${ML_API_MODEL}
+      BACKEND_HOST: ${BACKEND_HOST}
+      BACKEND_PORT: ${BACKEND_PORT}
+    ports:
+      - "${ML_API_PORT}:${ML_API_PORT}"
+    networks:
+      - dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://${ML_API_HOST}:${ML_API_PORT}/health/"]
+      interval: 1h
+      timeout: 5s
+      retries: 1
+      start_period: 10s
+
   db:
     image: postgres:15
     container_name: db
@@ -25,9 +47,10 @@ services:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
+      interval: 1h
       timeout: 5s
-      retries: 5
+      retries: 1
+      start_period: 10s
 
   backend:
     build:
@@ -35,10 +58,12 @@ services:
     restart: unless-stopped
     container_name: backend
     environment:
-      FRONTEND_HOST: ${FRONTEND_HOST}
-      FRONTEND_PORT: ${FRONTEND_PORT}
       BACKEND_HOST: ${BACKEND_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
+      ML_API_HOST: ${ML_API_HOST}
+      ML_API_PORT: ${ML_API_PORT}
+      FRONTEND_HOST: ${FRONTEND_HOST}
+      FRONTEND_PORT: ${FRONTEND_PORT}
       MEDIA_FOLDER: ${MEDIA_FOLDER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: ${POSTGRES_HOST}
@@ -51,9 +76,11 @@ services:
       - storage:/${BACKEND_HOST}/${MEDIA_FOLDER}
     networks:
       - dev
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
+    depends_on:
+      db:
+        condition: service_healthy
+      ml_api:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${BACKEND_HOST}:${BACKEND_PORT}/health/"]
       interval: 1h

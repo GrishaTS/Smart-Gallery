@@ -72,7 +72,7 @@ class AppBarMixin:
         if not hasattr(self, 'on_files_upload'):
             raise AttributeError('on_files_upload не инициализирована')
         self.progress_ring = ft.ProgressRing(value=0)
-        self.container_progress_ring = ft.Container(self.progress_ring, alignment=ft.alignment.center)
+        self.container_progress_ring = ft.Container(self.progress_ring, alignment=ft.alignment.center, visible=False)
         self.file_picker = ft.FilePicker(on_result=self.on_files_picked, on_upload=self.on_files_upload)
         self.page.overlay.append(self.file_picker)
         self.actions.append(ft.IconButton(

@@ -19,6 +19,7 @@ class SearchImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
 
     def __init__(self, page: ft.Page):
         self.map_uploads = {}
+        self.prompt = ""
         super().__init__(page)
         self.assemble_page()
     
@@ -37,13 +38,18 @@ class SearchImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
         else:
             self.grid.visible = False
             self.search_field.padding = 100
+    
+    def on_search_submit(self, e: ft.ControlEvent):
+        self.prompt = e.control.value.strip()
+        if self.prompt:
+            self.load_grid()
 
     def add_search_field(self):
         self.search_field = ft.Container(
             content=ft.TextField(
             label="Поиск изображений по описанию",
             border_color='blue', border_width=1, focused_border_width=3,
-            on_submit=..., # поиск
+            on_submit=self.on_search_submit,
         ),
             alignment=ft.alignment.center,
             padding=100
@@ -51,7 +57,7 @@ class SearchImagesView(BaseView, AppBarMixin, GridMixin, NavBarMixin):
         return self.search_field
     
     def get_images(self):
-        return images_api.get_images() # TODO: получить по запросу
+        return images_api.search_images(self.prompt)
 
     def set_sorting(self, sort_by):
         images_api.set_sorting(sort_by=sort_by)
