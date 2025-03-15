@@ -2,9 +2,9 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 class SImageAdd(BaseModel):
-    image_path: str
-    preview_path: str
-    embedding_path: str
+    image_object_name: str
+    thumbnail_object_name: str
+    embedding_object_name: str
     size: int
     uploaded_at: datetime | None = None
 

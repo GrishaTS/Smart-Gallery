@@ -3,8 +3,8 @@ networks:
     driver: bridge
 
 volumes:
-  storage:
-  db_data:
+  images-minio:
+  db-data:
 
 services:
   ml_api:
@@ -20,13 +20,40 @@ services:
       BACKEND_PORT: ${BACKEND_PORT}
     ports:
       - "${ML_API_PORT}:${ML_API_PORT}"
+    hostname: ${ML_API_PORT}
     networks:
       - dev
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${ML_API_HOST}:${ML_API_PORT}/health/"]
-      interval: 1h
+      interval: 60s
       timeout: 5s
-      retries: 1
+      retries: 5
+      start_period: 10s
+  
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server --console-address ":${MINIO_WEB_PORT}" /data/
+    ports:
+      - "${MINIO_PORT}:${MINIO_PORT}"
+      - "${MINIO_WEB_PORT}:${MINIO_WEB_PORT}"
+    networks:
+      - dev
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_HOST: ${MINIO_HOST}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_WEB_PORT: ${MINIO_WEB_PORT}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
+    hostname: ${MINIO_HOST}
+    volumes:
+      - images-minio:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://${MINIO_HOST}:${MINIO_PORT}/minio/health/live"]
+      interval: 60s
+      timeout: 5s
+      retries: 5
       start_period: 10s
 
   db:
@@ -39,17 +66,17 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - db_data:/var/lib/postgresql/data
     networks:
       - dev
+    volumes:
+      - db-data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 1h
+      interval: 60s
       timeout: 5s
-      retries: 1
+      retries: 5
       start_period: 10s
 
   backend:
@@ -64,28 +91,32 @@ services:
       ML_API_PORT: ${ML_API_PORT}
       FRONTEND_HOST: ${FRONTEND_HOST}
       FRONTEND_PORT: ${FRONTEND_PORT}
-      MEDIA_FOLDER: ${MEDIA_FOLDER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_HOST: ${MINIO_HOST}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
-    volumes:
-      - storage:/${BACKEND_HOST}/${MEDIA_FOLDER}
     networks:
       - dev
     depends_on:
       db:
         condition: service_healthy
+      minio:
+        condition: service_healthy
       ml_api:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${BACKEND_HOST}:${BACKEND_PORT}/health/"]
-      interval: 1h
+      interval: 60s
       timeout: 5s
-      retries: 1
+      retries: 5
       start_period: 10s
 
   frontend:
@@ -98,11 +129,11 @@ services:
       FRONTEND_PORT: ${FRONTEND_PORT}
       BACKEND_HOST: ${BACKEND_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
-      MEDIA_FOLDER: ${MEDIA_FOLDER}
+      MINIO_HOST: localhost # надо корректно сделать, когда буду выкатывать на проду
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    volumes:
-      - storage:/${FRONTEND_HOST}/${MEDIA_FOLDER}
     networks:
       - dev
     depends_on:
@@ -110,24 +141,21 @@ services:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${FRONTEND_HOST}:${FRONTEND_PORT}/"]
-      interval: 1h
+      interval: 60s
       timeout: 5s
-      retries: 1
+      retries: 5
       start_period: 10s
 
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
     restart: unless-stopped
-    environment:
-      - MEDIA_FOLDER=${MEDIA_FOLDER}
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt
-      - storage:/${MEDIA_FOLDER}
     networks:
       - dev
     depends_on:

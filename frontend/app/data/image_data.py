@@ -2,14 +2,14 @@ import re
 import base64
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
+from config import settings
 
 @dataclass
 class ImageData:
     id: int = None
-    image_path: str = None
-    preview_path: str = None
-    embedding_path: str = None
+    image_object_name: str = None
+    thumbnail_object_name: str = None
+    embedding_object_name: str = None
     uploaded_at: datetime = None
     size: int = None
 
@@ -21,13 +21,7 @@ class ImageData:
 
     def __eq__(self, other):
         return isinstance(other, ImageData) and self.id is not None and self.id == other.id
-
+    
     @staticmethod
-    def img_to_base64(path: str) -> str:
-        img_path = Path(path)
-        if img_path.exists():
-            ext = img_path.suffix[1:]
-            with img_path.open('rb') as img_file:
-                base64_str = base64.b64encode(img_file.read()).decode('utf-8')
-            return f'data:image/{ext};base64,{base64_str}'
-        return None
+    def minio_link(object_name: str):
+        return f'{settings.MINIO_BUCKET_URL}/{object_name}'

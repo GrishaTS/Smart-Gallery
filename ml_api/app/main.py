@@ -6,7 +6,7 @@ from app.config import settings
 
 
 print(f'Starting server on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}')
-app = FastAPI(title="Smart Gallery - ml-api", description="Сервис для генерации эмбеддингов")
+app = FastAPI(title="Smart Gallery - ml-api")
 
 app.include_router(router_health)
 app.include_router(router_embed)
