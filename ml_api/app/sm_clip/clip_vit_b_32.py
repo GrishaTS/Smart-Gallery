@@ -15,7 +15,7 @@ class ClipVitB32(BaseClip):
         # self.tokenizer = open_clip.get_tokenizer(self.MODEL_NAME)
         # self.model.to(self.device)
 
-    def get_image_embedding(self, image: Image.Image) -> np.ndarray:
+    async def get_image_embedding(self, image: Image.Image) -> np.ndarray:
         return np.concatenate([np.zeros(508, dtype=int), np.random.randint(-2, 5, size=4)])
         # image = image.convert("RGB")
         # image = self.preprocess(image).unsqueeze(0).to(self.device)
@@ -26,7 +26,7 @@ class ClipVitB32(BaseClip):
 
         # return image_features.cpu().numpy()
     
-    def get_text_embedding(self, text: str) -> np.ndarray:
+    async def get_text_embedding(self, text: str) -> np.ndarray:
         return np.concatenate([np.zeros(508, dtype=int), np.random.randint(-2, 5, size=4)])
         # text_tokens = self.tokenizer([text]).to(self.device)
 

@@ -1,8 +1,10 @@
 from pydantic_settings import BaseSettings
 from functools import cached_property
 from typing import ClassVar
+from typing import Literal
 
 class Settings(BaseSettings):
+    APP_MODE: Literal['DEV', 'PROD']
     BACKEND_HOST: str
     BACKEND_PORT: int
     ML_API_HOST: str
@@ -38,15 +40,15 @@ class Settings(BaseSettings):
     
     @cached_property
     def POSTGRES_URL(self):
-        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        return f'postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}'
 
     @cached_property
     def MINIO_ENDPOINT(self):
-        return f"{self.MINIO_HOST}:{self.MINIO_PORT}"
+        return f'{self.MINIO_HOST}:{self.MINIO_PORT}'
 
     @cached_property
     def MINIO_BUCKET_URL(self):
-        return f"http://{self.MINIO_ENDPOINT}/{self.MINIO_BUCKET_NAME}"
+        return f'http://{self.MINIO_ENDPOINT}/{self.MINIO_BUCKET_NAME}'
 
 
 settings = Settings()

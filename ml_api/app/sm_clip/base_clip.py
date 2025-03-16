@@ -7,11 +7,11 @@ class BaseClip(ABC):
     MODEL_NAME: str = None
 
     @abstractmethod
-    def get_text_embedding(self, prompt: str) -> np.ndarray:
+    async def get_text_embedding(self, prompt: str) -> np.ndarray:
         ...
     
     @abstractmethod
-    def get_image_embedding(self, image: Image.Image) -> np.ndarray:
+    async def get_image_embedding(self, image: Image.Image) -> np.ndarray:
         ...
     
     @classmethod
