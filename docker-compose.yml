@@ -3,9 +3,8 @@ networks:
     driver: bridge
 
 volumes:
-  minio-images:
-  qdrant-embs:
-  postgres-data:
+  images-minio:
+  db-data:
 
 services:
   ml_api:
@@ -30,7 +29,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-
+  
   minio:
     image: minio/minio:latest
     container_name: minio
@@ -49,7 +48,7 @@ services:
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
     hostname: ${MINIO_HOST}
     volumes:
-      - minio-images:/data
+      - images-minio:/data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${MINIO_HOST}:${MINIO_PORT}/minio/health/live"]
       interval: 60s
@@ -57,32 +56,9 @@ services:
       retries: 5
       start_period: 10s
 
-  qdrant:
-    image: qdrant/qdrant:latest
-    container_name: qdrant
-    restart: always
-    networks:
-      - dev
-    ports:
-      - "${QDRANT_PORT}:${QDRANT_PORT}"
-      - "${QDRANT_WEB_PORT}:${QDRANT_WEB_PORT}"
-    volumes:
-      - qdrant-embs:/qdrant/storage
-    hostname: ${QDRANT_HOST}
-    environment:
-      QDRANT_HOST: ${QDRANT_HOST}
-      QDRANT_PORT: ${QDRANT_PORT}
-      QDRANT_WEB_PORT: ${QDRANT_WEB_PORT}
-    healthcheck:
-      test: ["CMD-SHELL", "timeout 2 bash -c '</dev/tcp/${QDRANT_HOST}/${QDRANT_PORT}' || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
+  db:
+    image: postgres:15
+    container_name: db
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -90,11 +66,10 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    hostname: ${POSTGRES_HOST}
     networks:
       - dev
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     healthcheck:
@@ -126,22 +101,16 @@ services:
       MINIO_HOST: ${MINIO_HOST}
       MINIO_PORT: ${MINIO_PORT}
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
-      QDRANT_HOST: ${QDRANT_HOST}
-      QDRANT_PORT: ${QDRANT_PORT}
-      QDRANT_COLLECTION_NAME: ${QDRANT_COLLECTION_NAME}
-    hostname: ${BACKEND_HOST}
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:
       - dev
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
       minio:
         condition: service_healthy
       ml_api:
-        condition: service_healthy
-      qdrant:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://${BACKEND_HOST}:${BACKEND_PORT}/health/"]
@@ -167,7 +136,6 @@ services:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     networks:
       - dev
-    hostname: ${FRONTEND_HOST}
     depends_on:
       backend:
         condition: service_healthy

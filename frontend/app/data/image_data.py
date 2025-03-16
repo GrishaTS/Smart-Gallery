@@ -9,7 +9,7 @@ class ImageData:
     id: int = None
     image_object_name: str = None
     thumbnail_object_name: str = None
-    embedding_vector_id: str = None
+    embedding_object_name: str = None
     uploaded_at: datetime = None
     size: int = None
 

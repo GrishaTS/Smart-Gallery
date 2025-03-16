@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict
 class SImageAdd(BaseModel):
     image_object_name: str
     thumbnail_object_name: str
-    embedding_vector_id: str
+    embedding_object_name: str
     size: int
     uploaded_at: datetime | None = None
 

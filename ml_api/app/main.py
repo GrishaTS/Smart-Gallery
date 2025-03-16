@@ -5,6 +5,7 @@ from app.router import router_health, router_embed
 from app.config import settings
 
 
+print(f'Starting server on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}')
 app = FastAPI(title="Smart Gallery - ml-api")
 
 app.include_router(router_health)

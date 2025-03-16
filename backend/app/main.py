@@ -1,26 +1,22 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import (
-    create_postgres, delete_postgres,
-    create_minio, delete_minio,
-    create_qdrant, delete_qdrant
-)
+from app.database import create_db, create_minio, delete_db, delete_minio
 from app.router import router_health, router_image, router_images
 from app.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await create_postgres()
+    await create_db()
     await create_minio()
-    await create_qdrant()
     yield
-    await delete_postgres()
+    await delete_db()
     await delete_minio()
-    await delete_qdrant()
 
 
+print(f'Starting server on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}')
 app = FastAPI(title='Smart Gallery - backend', lifespan=lifespan)
 
 app.include_router(router_health)
