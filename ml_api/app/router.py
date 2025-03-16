@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 from app.sm_clip import model
 from PIL import Image
 import requests
+from app.schemas import ImageRequest, TextRequest
 
 router_health = APIRouter(prefix="/health", tags=["Проверка"])
 
@@ -15,8 +16,8 @@ def health_check():
 router_embed = APIRouter(prefix="/embed", tags=["Эмбединг"])
 
 @router_embed.post("/image")
-async def embed_image(image_url: str):
-    response = requests.get(image_url)
+async def embed_image(request: ImageRequest):
+    response = requests.get(request.image_url)
     image = None
     if response.status_code == 200:
         image = Image.open(io.BytesIO(response.content))
@@ -27,6 +28,6 @@ async def embed_image(image_url: str):
 
 
 @router_embed.post("/text")
-async def embed_text(prompt: str):
-    embedding = await asyncio.to_thread(model.get_text_embedding, prompt)
+async def embed_text(request: TextRequest):
+    embedding = await asyncio.to_thread(model.get_text_embedding, request.text)
     return embedding.tolist()

@@ -43,5 +43,4 @@ def main(page: ft.Page):
 
 if __name__ == '__main__':
     os.makedirs(settings.TEMP_DIR, exist_ok=True)
-    print(f'Start compose on {settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}')
     ft.app(target=main, host=settings.FRONTEND_HOST, port=settings.FRONTEND_PORT, view=ft.AppView.WEB_BROWSER, upload_dir=settings.TEMP_DIR)
