@@ -51,7 +51,7 @@ class ImageView(BaseView, AppBarMixin):
         dlg = ft.AlertDialog(
             content=ft.Container(
                 content=ft.Image(
-                    src=img.image_object_name,
+                    src=ImageData.minio_link(img.image_object_name),
                     expand=True,
                     fit='contain'
                 ),

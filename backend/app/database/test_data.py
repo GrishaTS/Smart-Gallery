@@ -8,7 +8,7 @@ headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 async def fill_test_data(count=50):
     async with httpx.AsyncClient(verify=False, headers=headers, follow_redirects=True) as client:
         for i in range(count):
-            file_link = "https://picsum.photos/200"
+            file_link = "https://picsum.photos/1000"
             file_name = f"lorem_picsum_{i}.jpeg"
             response = await client.get(file_link, timeout=5)
             response.raise_for_status()
