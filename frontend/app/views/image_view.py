@@ -51,7 +51,7 @@ class ImageView(BaseView, AppBarMixin):
         dlg = ft.AlertDialog(
             content=ft.Container(
                 content=ft.Image(
-                    src=img.img_to_base64(img.image_path),
+                    src=img.image_object_name,
                     expand=True,
                     fit='contain'
                 ),
@@ -82,7 +82,7 @@ class ImageView(BaseView, AppBarMixin):
                     ) if self.prev_image else None,
                 ),
                 ft.Container(
-                    content=ft.Image(src=self.cur_imgage.img_to_base64(self.cur_imgage.image_path), fit='contain'),
+                    content=ft.Image(src=ImageData.minio_link(self.cur_imgage.image_object_name), fit='contain'),
                     alignment=ft.alignment.center,
                     on_click=lambda e: self.tap_on_image(e, self.cur_imgage),
                     expand=True
@@ -114,7 +114,7 @@ class ImageView(BaseView, AppBarMixin):
             self.scroller.controls.append(
                 ft.Container(
                     content=ft.Image(
-                        src=img.img_to_base64(img.preview_path),
+                        src=ImageData.minio_link(img.thumbnail_object_name),
                         width=70 if not is_selected else 90,
                         height=70 if not is_selected else 90,
                         border_radius=5,
@@ -140,4 +140,3 @@ class ImageView(BaseView, AppBarMixin):
             self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.next_image.id))
         else:
             self.page.go(ViewRoutes.IMAGES)
-

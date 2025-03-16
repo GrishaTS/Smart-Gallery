@@ -18,13 +18,13 @@ class GridMixin(ABC):
     def load_grid(self, update=True):
         if update:
             self.grid.clean()
-        images = self.get_images()
+        images: list[ImageData] = self.get_images()
         if self.GRID_SELECTION_MODE:
             if not hasattr(self, 'add_selection_image'):
                 raise AttributeError('add_selection_image не инициализирована')
             for img in images:
                 self.grid.controls.append(ft.Container(
-                    content=ft.Image(src=img.img_to_base64(img.preview_path), expand=True, fit='cover'),
+                    content=ft.Image(src=ImageData.minio_link(img.thumbnail_object_name), expand=True, fit='cover'),
                     on_click=lambda _, image_id=img.id: self.add_selection_image(image_id),
                     tooltip=f'{img.uploaded_at}\n{img.size} байт',
                     border=ft.border.all(3, 'blue') if img.id in self.selected_images_id else None,
@@ -34,7 +34,7 @@ class GridMixin(ABC):
             for img in images:
                 self.grid.controls.append(
                     ft.Container(
-                        content=ft.Image(src=img.img_to_base64(img.preview_path), expand=True, fit='cover'),
+                        content=ft.Image(src=ImageData.minio_link(img.thumbnail_object_name), expand=True, fit='cover'),
                         on_click=lambda _, image_id=img.id: self.page.go(f'/image/{image_id}'),
                         tooltip=f'{img.uploaded_at}\n{img.size} байт',
                     )

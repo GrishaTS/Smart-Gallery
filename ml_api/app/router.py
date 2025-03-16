@@ -1,6 +1,9 @@
+import asyncio
 import io
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, HTTPException
 from app.sm_clip import model
+from PIL import Image
+import requests
 
 router_health = APIRouter(prefix="/health", tags=["Проверка"])
 
@@ -12,12 +15,18 @@ def health_check():
 router_embed = APIRouter(prefix="/embed", tags=["Эмбединг"])
 
 @router_embed.post("/image")
-async def embed_image(file: UploadFile = File(...)):
-    embedding = model.get_image_embedding(io.BytesIO(await file.read()))
+async def embed_image(image_url: str):
+    response = requests.get(image_url)
+    image = None
+    if response.status_code == 200:
+        image = Image.open(io.BytesIO(response.content))
+    if not image:
+        raise HTTPException(status_code=400, detail=f"Ошибка загрузки изображения")
+    embedding = await asyncio.to_thread(model.get_image_embedding, image)
     return embedding.tolist()
 
 
-@router_embed.post("/text/{prompt}")
+@router_embed.post("/text")
 async def embed_text(prompt: str):
-    embedding = model.get_text_embedding(prompt)
+    embedding = await asyncio.to_thread(model.get_text_embedding, prompt)
     return embedding.tolist()

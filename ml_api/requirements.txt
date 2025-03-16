@@ -7,3 +7,4 @@ pydantic-settings==2.7.1
 python-multipart==0.0.20
 aiofiles==24.1.0
 numpy==2.2.3
+requests

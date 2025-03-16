@@ -7,15 +7,19 @@ class Settings(BaseSettings):
     BACKEND_HOST: str
     BACKEND_PORT: int
     ML_API_HOST: str
-    ML_API_PORT: str
+    ML_API_PORT: int
     FRONTEND_HOST: str
     FRONTEND_PORT: int
-    MEDIA_FOLDER: str
     POSTGRES_DB: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
     POSTGRES_HOST: str
     POSTGRES_PORT: int
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    MINIO_ROOT_USER: str
+    MINIO_ROOT_PASSWORD: str
+    MINIO_HOST: str
+    MINIO_PORT: int
+    MINIO_BUCKET_NAME: str
     CLIP_THRESHOLD: ClassVar[int] = 0.3
 
     @cached_property
@@ -35,16 +39,12 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     @cached_property
-    def IMAGES_PATH(self):
-        return os.path.join(self.MEDIA_FOLDER, 'images')
+    def MINIO_ENDPOINT(self):
+        return f"{self.MINIO_HOST}:{self.MINIO_PORT}"
 
     @cached_property
-    def THUMBNAILS_PATH(self):
-        return os.path.join(self.MEDIA_FOLDER, 'thumbnails')
-
-    @cached_property
-    def EMBEDDINGS_PATH(self):
-        return os.path.join(self.MEDIA_FOLDER, 'embeddings')
+    def MINIO_BUCKET_URL(self):
+        return f"http://{self.MINIO_ENDPOINT}/{self.MINIO_BUCKET_NAME}"
 
 
 settings = Settings()

@@ -20,6 +20,7 @@ def main(page: ft.Page):
         print(f'INFO:\t{page.client_ip} - "{route.data}"', end=' ')
         troute = ft.TemplateRoute(route.data)
         page.views.clear()
+        page.on_resized = None
         if troute.match(HomeView.ROUTE):
             page.views.append(HomeView(page))
         elif troute.match(ImagesView.ROUTE):

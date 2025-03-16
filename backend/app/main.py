@@ -2,21 +2,22 @@ import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
-from app.database import create_tables, create_media_folders
+from app.database import create_db, create_minio, delete_db, delete_minio
 from app.router import router_health, router_image, router_images
 from app.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await create_tables()
-    await create_media_folders()
-    print('База данных и медиа-файлы подготовлены')
+    await create_db()
+    await create_minio()
     yield
+    await delete_db()
+    await delete_minio()
+
 
 print(f'Starting server on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}')
-app = FastAPI(title='Smart Gallery - backend', description='', lifespan=lifespan)
+app = FastAPI(title='Smart Gallery - backend', lifespan=lifespan)
 
 app.include_router(router_health)
 app.include_router(router_image)
@@ -29,5 +30,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.mount("/storage", StaticFiles(directory=settings.MEDIA_FOLDER), name="storage")
