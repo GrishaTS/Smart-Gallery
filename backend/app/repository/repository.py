@@ -1,4 +1,4 @@
-from app.api import get_image_embedding, get_text_embedding, cosine_similarity
+from app.api import get_image_embedding, get_text_embedding
 import asyncio
 from pathlib import Path
 from app.repository.minio_repository import MinioRepository
