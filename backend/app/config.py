@@ -1,4 +1,3 @@
-import os
 from pydantic_settings import BaseSettings
 from functools import cached_property
 from typing import ClassVar
@@ -20,6 +19,9 @@ class Settings(BaseSettings):
     MINIO_HOST: str
     MINIO_PORT: int
     MINIO_BUCKET_NAME: str
+    QDRANT_HOST: str
+    QDRANT_PORT: int
+    QDRANT_COLLECTION_NAME: str
     CLIP_THRESHOLD: ClassVar[int] = 0.3
 
     @cached_property
