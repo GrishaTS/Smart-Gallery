@@ -1,0 +1,57 @@
+*   [33m8df88cd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #3 from GrishaTS/qdrant
+[31m|[m[32m\[m  
+[31m|[m * [33m2b64d24[m Removed the local cos_sim function in ml_api because Qdrant handles the calculation.
+[31m|[m * [33m08cd619[m connected qdrant and rewtire all dbs-code in backend
+* [32m|[m [33m221f44b[m Merge pull request #2 from GrishaTS/add_minio
+[33m|[m[32m\[m[32m|[m 
+[33m|[m * [33m718c517[m[33m ([m[1;31morigin/add_minio[m[33m, [m[1;32madd_minio[m[33m)[m rewrite minio
+[33m|[m[33m/[m  
+*   [33mbc0e9b5[m[33m ([m[1;32madd_clip_model[m[33m)[m Merge pull request #1 from GrishaTS/add_clip_model
+[35m|[m[36m\[m  
+[35m|[m * [33m7d2f9e3[m[33m ([m[1;31morigin/add_clip_model[m[33m)[m fix some problems and droptest
+[35m|[m * [33md4b1fb4[m add done ml-api
+[35m|[m * [33m040a018[m start ml-api and set sqlite to pg
+[35m|[m[35m/[m  
+* [33mcbf1b2b[m fixed an excessive number of api requests in imageview
+* [33m1ac0503[m backend + frontend stable version
+* [33m77ff13c[m pass
+* [33me8424e9[m pass
+* [33me34e77a[m redo images, search and deletion views
+* [33m2da567d[m done ui and backend decomposition
+* [33med08e26[m pass
+* [33m1f4eeea[m images and image views done
+* [33m28ea860[m pass
+* [33m9c17c4a[m bad docker
+* [33m332a5c8[m docker
+* [33md76f945[m del .env
+* [33mf0bc79f[m add ml decomposition
+* [33m1531c4e[m start frontend part
+* [33mf65fa88[m add .env to gitignore
+* [33mb855b37[m start to decompose to backend and frontend
+* [33m2d0b5a7[m update текст программы
+* [33m814b14f[m add текст програмы
+* [33me19a66b[m update описание
+* [33m5b9486b[m Update README.md
+* [33mfb674cc[m add searching images
+* [33m308da7d[m add searching images
+* [33m6e668e8[m start making clip model and correcting ui
+* [33m6024a8e[m edit
+* [33m6c3f317[m pass
+* [33me479266[m Удалил media preview из репозитория
+* [33mbe8097f[m pass
+* [33mad65ba7[m pass
+*   [33m272d010[m Merge branch 'main' of https://github.com/GrishaTS/Coursework
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m5f573a7[m Update README.md
+* [1;32m|[m [33m6790e86[m full ui done
+[1;32m|[m[1;32m/[m  
+* [33md158edf[m readme v1
+* [33m9fdf8a9[m pass
+* [33m4b2758a[m pass
+*   [33m6f1be0b[m Merge branch 'main' of https://github.com/GrishaTS/Coursework
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33m7c8b838[m Update README.md
+* [1;34m|[m [33mc9dc7dc[m add Technical specification
+[1;34m|[m[1;34m/[m  
+* [33m83df2df[m add description .docx
+* [33m222b063[m Initial commit
