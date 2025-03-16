@@ -24,7 +24,6 @@ class Repository(BaseRepository):
         image_object_name = f'images/{db_id}.{img_ext}'
         await MinioRepository.add(img_bytes, image_object_name, img_ext)
 
-        print(file.filename, img_ext)
         thumbnail_bytes = await MinioRepository.create_thumbnail(img_bytes, img_ext)
         thumbnail_object_name = f'thumbnail/{db_id}.{img_ext}'
         await MinioRepository.add(thumbnail_bytes, thumbnail_object_name, img_ext)

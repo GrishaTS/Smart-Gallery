@@ -31,4 +31,7 @@ async def create_minio() -> None:
 
 async def delete_minio() -> None:
     if minio_client.bucket_exists(settings.MINIO_BUCKET_NAME):
+        objects = minio_client.list_objects(settings.MINIO_BUCKET_NAME, recursive=True)
+        for obj in objects:
+            minio_client.remove_object(settings.MINIO_BUCKET_NAME, obj.object_name)
         minio_client.remove_bucket(settings.MINIO_BUCKET_NAME)

@@ -110,6 +110,7 @@ services:
     restart: unless-stopped
     container_name: backend
     environment:
+      APP_MODE: ${APP_MODE}
       BACKEND_HOST: ${BACKEND_HOST}
       BACKEND_PORT: ${BACKEND_PORT}
       ML_API_HOST: ${ML_API_HOST}

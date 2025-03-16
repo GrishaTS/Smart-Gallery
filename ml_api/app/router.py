@@ -23,11 +23,11 @@ async def embed_image(request: ImageRequest):
         image = Image.open(io.BytesIO(response.content))
     if not image:
         raise HTTPException(status_code=400, detail=f"Ошибка загрузки изображения")
-    embedding = await asyncio.to_thread(model.get_image_embedding, image)
+    embedding = await model.get_image_embedding(image)
     return embedding.tolist()
 
 
 @router_embed.post("/text")
 async def embed_text(request: TextRequest):
-    embedding = await asyncio.to_thread(model.get_text_embedding, request.text)
+    embedding =  await model.get_text_embedding(request.text)
     return embedding.tolist()

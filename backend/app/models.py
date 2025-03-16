@@ -14,7 +14,7 @@ class ImageOrm(Model):
     image_object_name: Mapped[str]
     thumbnail_object_name: Mapped[str]
     embedding_vector_id: Mapped[str]
-    uploaded_at: Mapped[str] = mapped_column(DateTime, default=func.now())
+    uploaded_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     size: Mapped[int]
     
     @staticmethod
