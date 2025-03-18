@@ -1,11 +1,16 @@
 import flet as ft
-from api import images_api, ImageApi
-from .base_view import BaseView
-from routes import ViewRoutes
-from .mixins import AppBarMixin
-from data import ImageData
+
+from app.api import images_api, ImageApi
+from app.views.base_view import BaseView
+from app.routes import ViewRoutes
+from app.views.mixins import AppBarMixin
+from app.data import ImageData
 
 class ImageView(BaseView, AppBarMixin):
+    """
+    Представление для просмотра изображения.
+    """
+
     ROUTE = ViewRoutes.IMAGE
 
     APP_BAR_TITLE_ROUTE = ViewRoutes.IMAGES
@@ -13,12 +18,23 @@ class ImageView(BaseView, AppBarMixin):
     APP_BAR_DELETE = True
 
     def __init__(self, page: ft.Page, image_id):
+        """
+        Инициализирует страницу просмотра изображения.
+
+        :param page: Экземпляр страницы Flet.
+        :param image_id: ID просматриваемого изображения.
+        """
         super().__init__(page)
         self.n_neighbors = int((self.page.width / 100 - 1) / 2)
         self.init_images(image_id)
         self.assemble_page()
     
     def init_images(self, image_id):
+        """
+        Загружает текущее изображение и его соседей.
+
+        :param image_id: ID изображения.
+        """
         self.cur_imgage = ImageApi.fetch_image(image_id)
         self.n_neighbors_images = images_api.get_n_neighbors(self.cur_imgage, self.n_neighbors)
         image_index = self.n_neighbors_images.index(self.cur_imgage)
@@ -29,6 +45,9 @@ class ImageView(BaseView, AppBarMixin):
             self.next_image = self.n_neighbors_images[image_index + 1]
     
     def assemble_page(self):
+        """
+        Собирает компоненты страницы.
+        """
         self.app_bar()
         self.page.on_keyboard_event = self.tap_on_key
         self.page.on_resized = self.update_n_neighbors
@@ -42,12 +61,23 @@ class ImageView(BaseView, AppBarMixin):
         self.load_scroller_images(update=False)
     
     def tap_on_key(self, e: ft.KeyboardEvent):
+        """
+        Обрабатывает нажатие стрелок для навигации по изображениям.
+
+        :param e: Событие нажатия клавиши.
+        """
         if e.key == 'Arrow Left' and self.prev_image:
             self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.prev_image.id))
         elif e.key == 'Arrow Right' and self.next_image:
             self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.next_image.id))
 
     def tap_on_image(self, e: ft.TapEvent, img: ImageData):
+        """
+        Открывает полноразмерное изображение в диалоговом окне.
+
+        :param e: Событие нажатия на изображение.
+        :param img: Объект изображения.
+        """
         dlg = ft.AlertDialog(
             content=ft.Container(
                 content=ft.Image(
@@ -67,10 +97,18 @@ class ImageView(BaseView, AppBarMixin):
         self.page.open(dlg)
     
     def update_n_neighbors(self, *_):
+        """
+        Обновляет количество соседей при изменении ширины экрана.
+        """
         self.n_neighbors = int((self.page.width / 100 - 1) / 2)
         self.load_scroller_images()
 
     def get_image(self):
+        """
+        Создаёт компонент для отображения изображения.
+
+        :return: Flet Row с изображением и кнопками навигации.
+        """
         return ft.Row(
             [
                 ft.Container(
@@ -101,6 +139,11 @@ class ImageView(BaseView, AppBarMixin):
         )
 
     def load_scroller_images(self, update=True):
+        """
+        Загружает изображения в карусель.
+
+        :param update: Флаг обновления скроллера перед загрузкой.
+        """
         if update:
             self.scroller.clean()
         selected_index = self.n_neighbors_images.index(self.cur_imgage)
@@ -133,6 +176,9 @@ class ImageView(BaseView, AppBarMixin):
             self.scroller.update()
     
     def delete(self):
+        """
+        Удаляет текущее изображение и перенаправляет на следующее или предыдущее.
+        """
         ImageApi.delete_image(self.cur_imgage.id)
         if self.prev_image:
             self.page.go(ViewRoutes.build(ViewRoutes.IMAGE, image_id=self.prev_image.id))

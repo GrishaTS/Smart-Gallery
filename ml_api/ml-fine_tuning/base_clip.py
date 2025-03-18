@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Type
-
 import numpy as np
 from PIL import Image
-
-from app.config import settings
+from typing import Optional
 
 
 class BaseClip(ABC):
@@ -33,15 +30,3 @@ class BaseClip(ABC):
         :return: Векторное представление изображения в виде np.ndarray.
         """
         ...
-
-    @classmethod
-    def get_model(cls) -> Optional["BaseClip"]:
-        """
-        Возвращает экземпляр модели CLIP, соответствующей конфигурации.
-
-        :return: Экземпляр класса-наследника BaseClip или None, если модель не найдена.
-        """
-        for clip_cls in cls.__subclasses__():
-            if clip_cls.MODEL_NAME == settings.ML_API_MODEL:
-                return clip_cls()
-        return None

@@ -6,6 +6,7 @@ WORKDIR /frontend
 
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONPATH=/frontend
 ENV PYTHONUNBUFFERED=1
 
 ENV FLET_SECRET_KEY="secret_key"
