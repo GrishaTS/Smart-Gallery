@@ -30,8 +30,3 @@ class BaseClip(ABC):
         :return: Векторное представление изображения в виде np.ndarray.
         """
         ...
-    
-    @property
-    def parameters_count(self):
-        return sum(p.numel() for p in model.model.parameters())
-
