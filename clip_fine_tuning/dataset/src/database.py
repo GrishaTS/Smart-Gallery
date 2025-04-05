@@ -1,22 +1,15 @@
-import asyncio
-from sqlalchemy.ext.asyncio import (
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from dataset.src.models import Model
 
-DATABASE_URL = "sqlite+aiosqlite:///./dataset/clip.db"
+DATABASE_URL = "sqlite:///./dataset/clip.db"
 
-engine = create_async_engine(DATABASE_URL, echo=False)
-sqlite_client = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
+engine = create_engine(DATABASE_URL, echo=False)
+sqlite_client = sessionmaker(bind=engine)
 
-
-async def init_db():
-    async with engine.begin() as conn:
-        await conn.run_sync(Model.metadata.create_all)
-
+def init_db():
+    Model.metadata.create_all(bind=engine)
 
 if __name__ == "__main__":
-    asyncio.run(init_db())
+    init_db()
