@@ -3,7 +3,7 @@ import open_clip
 import numpy as np
 from PIL import Image
 
-from .base_clip import BaseClip
+from app.sm_clip.base_clip import BaseClip
 
 
 class ClipVitB32(BaseClip):
@@ -18,9 +18,11 @@ class ClipVitB32(BaseClip):
         Инициализирует модель CLIP ViT-B-32.
         """
         self.device: str = "cuda" if torch.cuda.is_available() else "cpu"
+        print('Loading model...')
         self.model, self.preprocess, _ = open_clip.create_model_and_transforms(
             self.MODEL_NAME, pretrained="openai"
         )
+        print('Model loaded successfully.')
         self.tokenizer = open_clip.get_tokenizer(self.MODEL_NAME)
         self.model.to(self.device)
 
