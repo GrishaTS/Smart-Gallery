@@ -2,9 +2,16 @@
 
 ___
 ## About
+*Smart Gallery — Backend is the server-side component of the Smart Gallery project, a photo management system designed to work offline. The backend is built with FastAPI and integrates multiple services to handle image storage, search, and metadata management.*
 
-___
-## Usage
+Key features:
+- Image upload and retrieval using RESTful APIs
+- Search by text queries with the help of a machine learning microservice (CLIP-based)
+- Storage of image metadata (e.g., path, preview, size, creation date, and embeddings)
+- Integration with PostgreSQL, MinIO, and Qdrant for relational, object, and vector data respectively
+- Environment support for development and production, with automated setup and test data generation in DEV mode
+- The backend is containerized using Docker and is designed to interact seamlessly with the frontend and ML microservices.
+
 
 ___
 ## Project Structure
@@ -58,3 +65,4 @@ ___
 
 ___
 ## Technologies Used
+![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi) ![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI-333333?logo=uvicorn) ![Pydantic](https://img.shields.io/badge/Pydantic-Validation-4B8BBE?logo=pydantic) ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-ORM-000000?logo=sqlalchemy) ![Pydantic Settings](https://img.shields.io/badge/Settings-Config-4B8BBE) ![Multipart](https://img.shields.io/badge/Multipart-Uploads-FFD43B) ![Pillow](https://img.shields.io/badge/Images-Pillow-316192?logo=python) ![Aiofiles](https://img.shields.io/badge/Async-FileIO-6A5ACD) ![Asyncpg](https://img.shields.io/badge/PostgreSQL-Asyncpg-00599C) ![HTTPX](https://img.shields.io/badge/HTTP-Client-0E8AC8) ![NumPy](https://img.shields.io/badge/Array-Numerics-013243?logo=numpy) ![MinIO](https://img.shields.io/badge/ObjectStorage-MinIO-F05032?logo=minio) ![Qdrant](https://img.shields.io/badge/VectorDB-Qdrant-FF6F00) ![Requests](https://img.shields.io/badge/Requests-SyncClient-20232A?logo=python)
