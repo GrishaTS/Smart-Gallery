@@ -58,13 +58,4 @@ ___
 
 ___
 ## Technologies Used
-![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy-000000?logo=sqlalchemy)  
-![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite)  
-![DashScope](https://img.shields.io/badge/QwenAPI-DashScope-0064FF)  
-![TQDM](https://img.shields.io/badge/Progress-TQDM-4CAF50)  
-![Requests](https://img.shields.io/badge/HTTP-Requests-20232A?logo=python)  
-![OpenCLIP](https://img.shields.io/badge/Model-OpenCLIP-FF8C00)  
-![ruCLIP](https://img.shields.io/badge/Model-ruCLIP-orange)  
-![Torch](https://img.shields.io/badge/Fine--tuning-PyTorch-EE4C2C?logo=pytorch)  
-![HuggingFace](https://img.shields.io/badge/Hub-HuggingFace-FF4C7B?logo=huggingface)  
-![LiveLossPlot](https://img.shields.io/badge/Monitoring-LiveLossPlot-44CC11)
+![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy-000000?logo=sqlalchemy) ![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite) ![DashScope](https://img.shields.io/badge/QwenAPI-DashScope-0064FF) ![TQDM](https://img.shields.io/badge/Progress-TQDM-4CAF50) ![Requests](https://img.shields.io/badge/HTTP-Requests-20232A?logo=python) ![OpenCLIP](https://img.shields.io/badge/Model-OpenCLIP-FF8C00) ![ruCLIP](https://img.shields.io/badge/Model-ruCLIP-orange) ![Torch](https://img.shields.io/badge/Fine--tuning-PyTorch-EE4C2C?logo=pytorch) ![HuggingFace](https://img.shields.io/badge/Hub-HuggingFace-FF4C7B?logo=huggingface) ![LiveLossPlot](https://img.shields.io/badge/Monitoring-LiveLossPlot-44CC11)

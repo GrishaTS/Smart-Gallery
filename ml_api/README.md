@@ -1,12 +1,12 @@
 # Smart Gallery — ML Api
+
+___
+## About
 *Smart Gallery — ML Api is the machine learning microservice of the Smart Gallery project. It is responsible for generating image and text embeddings. The service is built with FastAPI and is designed to integrate seamlessly with other components of the system.*
 
 Key features:
 - Generation of embeddings for both images and text  
 - Asynchronous service using FastAPI and Uvicorn  
-
-___
-## About
 
 ___
 ## Project Structure
@@ -40,15 +40,4 @@ ___
 
 ___
 ## Technologies Used
-![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi)  
-![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI-333333?logo=uvicorn)  
-![Pydantic](https://img.shields.io/badge/Pydantic-Validation-4B8BBE?logo=pydantic)  
-![Pillow](https://img.shields.io/badge/Images-Pillow-316192)  
-![NumPy](https://img.shields.io/badge/Numerics-NumPy-013243?logo=numpy)  
-![Hugging Face](https://img.shields.io/badge/ModelHub-HuggingFace-FF4C7B?logo=huggingface)
-![Requests](https://img.shields.io/badge/HTTP-Requests-20232A)  
-![Python-Multipart](https://img.shields.io/badge/Uploads-Multipart-FFD43B)  
-![Aiofiles](https://img.shields.io/badge/Async-FileIO-6A5ACD)  
-![RuCLIP](https://img.shields.io/badge/Model-RuCLIP-orange)  
-![YouTokenToMe](https://img.shields.io/badge/Tokenizer-YouTokenToMe-blue)  
-![Cython](https://img.shields.io/badge/Cython-Accelerated-FF6600)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi)   ![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI-333333?logo=uvicorn)   ![Pydantic](https://img.shields.io/badge/Pydantic-Validation-4B8BBE?logo=pydantic)   ![Pillow](https://img.shields.io/badge/Images-Pillow-316192)   ![NumPy](https://img.shields.io/badge/Numerics-NumPy-013243?logo=numpy)   ![Hugging Face](https://img.shields.io/badge/ModelHub-HuggingFace-FF4C7B?logo=huggingface)   ![Requests](https://img.shields.io/badge/HTTP-Requests-20232A)   ![Python-Multipart](https://img.shields.io/badge/Uploads-Multipart-FFD43B)   ![Aiofiles](https://img.shields.io/badge/Async-FileIO-6A5ACD)   ![RuCLIP](https://img.shields.io/badge/Model-RuCLIP-orange)   ![YouTokenToMe](https://img.shields.io/badge/Tokenizer-YouTokenToMe-blue)   ![Cython](https://img.shields.io/badge/Cython-Accelerated-FF6600)

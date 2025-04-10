@@ -69,8 +69,4 @@ ___
 
 ___
 ## Technologies Used
-![Flet](https://img.shields.io/badge/Flet-UI_Framework-007ACC)  
-![HTTPX](https://img.shields.io/badge/HTTP-Client-0E8AC8)  
-![Pydantic Settings](https://img.shields.io/badge/Settings-Config-4B8BBE)  
-![Websockets](https://img.shields.io/badge/Realtime-Websockets-FFA500)  
-![WSProto](https://img.shields.io/badge/Protocol-WSProto-6A5ACD)
+![Flet](https://img.shields.io/badge/Flet-UI_Framework-007ACC) ![HTTPX](https://img.shields.io/badge/HTTP-Client-0E8AC8) ![Pydantic Settings](https://img.shields.io/badge/Settings-Config-4B8BBE) ![Websockets](https://img.shields.io/badge/Realtime-Websockets-FFA500) ![WSProto](https://img.shields.io/badge/Protocol-WSProto-6A5ACD)
