@@ -182,17 +182,9 @@ ___
         <summary>📂 models/</summary>
         <ul>
           <details>
-            <summary>📂 fine-tuned/</summary>
-            <ul>
-              <li>📄 __init__.py</li>
-              <li>📄 ruclip_clip993.pt</li>
-            </ul>
-          </details>
-          <details>
             <summary>📂 fine-tuning/</summary>
             <ul>
               <li>📄 1. ruclip_clip993.ipynb</li>
-              <li>📄 test.ipynb</li>
             </ul>
           </details>
           <li>📄 1. open_clip.ipynb</li>

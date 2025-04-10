@@ -36,12 +36,6 @@ ___
       <summary>📂 models/</summary>
       <ul>
         <details>
-          <summary>📂 fine-tuned/</summary>
-          <ul>
-            <li>📄 <code>ruclip_clip993.pt</code> — Fine-tuned ruCLIP model checkpoint</li>
-          </ul>
-        </details>
-        <details>
           <summary>📂 fine-tuning/</summary>
           <ul>
             <li>📄 <code>1. ruclip_clip993.ipynb</code> — Notebook for training ruCLIP on custom dataset</li>
@@ -50,6 +44,7 @@ ___
         <li>📄 <code>1. open_clip.ipynb</code> — Experiment with OpenCLIP model</li>
         <li>📄 <code>2. ruclip.ipynb</code> — Loading and using ruCLIP</li>
         <li>📄 <code>3. ruclip_tiny.ipynb</code> — Experiment with ruCLIP tiny version</li>
+        <li>📄 <code>4. ruclip_clip993.ipynb</code> — Loading and using ruClip finetuned clip993</li>
         <li>📄 <code>base_clip.py</code> — Abstract class for CLIP-like models</li>
       </ul>
     </details>
