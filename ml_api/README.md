@@ -1,4 +1,5 @@
 # Smart Gallery — ML Api
+![image](https://github.com/user-attachments/assets/daa4de53-04fd-4726-8ad8-02144d0c8279)
 
 ___
 ## About
