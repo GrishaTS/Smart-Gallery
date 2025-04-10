@@ -10,6 +10,11 @@ ___
 - The entire system is fully containerized with Docker, and designed to work without an internet connection — making it ideal for local or secure environments
 
 ___
+## Architecture
+![Smart Gallery - Frame 1 (1)](https://github.com/user-attachments/assets/4e70a845-1029-46fb-8342-096d2249f331)
+![Smart Gallery - Frame 2 (2)](https://github.com/user-attachments/assets/0602964c-3c33-4bbd-be99-9d1360518ddd)
+
+___
 ## Installation
 Clone the Smart-Gallery repository from GitHub:
 ```bash
@@ -40,10 +45,6 @@ docker compose --env-file .env.dev up --build
 - **MinIO:** [http://localhost:9001](http://localhost:9001) — login with `minio` / `secretpass`  
 - **Qdrant:** [http://localhost:6334](http://localhost:6333/dashboard)  
 
-___
-## Architecture
-![Smart Gallery - Frame 1 (1)](https://github.com/user-attachments/assets/4e70a845-1029-46fb-8342-096d2249f331)
-![Smart Gallery - Frame 2 (2)](https://github.com/user-attachments/assets/0602964c-3c33-4bbd-be99-9d1360518ddd)
 
 
 ___
