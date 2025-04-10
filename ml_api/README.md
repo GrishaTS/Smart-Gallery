@@ -7,6 +7,7 @@ ___
 Key features:
 - Generation of embeddings for both images and text  
 - Asynchronous service using FastAPI and Uvicorn  
+![image](https://github.com/user-attachments/assets/3b664812-e689-466d-b271-e4f35983fdf4)
 
 ___
 ## Project Structure
