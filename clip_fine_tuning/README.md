@@ -1,6 +1,6 @@
 # Smart Gallery — CLIP Fine-Tuning
 
-![image](https://github.com/user-attachments/assets/fd750ddd-ff3a-4aa8-b590-cd266907baf1)
+![image](https://github.com/user-attachments/assets/fd750ddd-ff3a-4aa8-b590-cd266907baf1)  
 *Рисунок 1: Дообучение ruclip на датасете из ≈ 1000 изображений*
 
 ___
