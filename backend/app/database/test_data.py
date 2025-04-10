@@ -18,7 +18,7 @@ async def fill_test_data(count: int = 50) -> None:
             file_link = f"https://picsum.photos/1000/1000?random={i}"
             file_name = f"lorem_picsum_{i}.jpeg"
 
-            response = await client.get(file_link, timeout=5)
+            response = await client.get(file_link, timeout=15)
             response.raise_for_status()
 
             file_bytes = response.content

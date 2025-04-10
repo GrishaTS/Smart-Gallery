@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.router import router_health, router_embed
 from app.config import settings
 
+print(f'Starting server on {settings.ML_API_HOST}:{settings.ML_API_PORT}')
 # Создание экземпляра FastAPI
 app = FastAPI(title="Smart Gallery - ml-api")
 

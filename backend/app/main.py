@@ -43,6 +43,7 @@ async def lifespan(app: FastAPI):
     print("Выключение")
 
 
+print(f'Starting server on {settings.BACKEND_HOST}:{settings.BACKEND_PORT}')
 app = FastAPI(title="Smart Gallery - backend", lifespan=lifespan)
 
 # Регистрация роутеров

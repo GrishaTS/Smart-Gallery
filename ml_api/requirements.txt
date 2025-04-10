@@ -1,4 +1,10 @@
-open_clip_torch==2.31.0
+# open_clip_torch==2.31.0
+# Cython==0.29.32
+# youtokentome==1.0.6
+wheel
+Cython
+youtokentome
+ruclip==0.0.2
 pillow==11.1.0
 fastapi==0.115.8
 uvicorn==0.34.0
@@ -7,4 +13,4 @@ pydantic-settings==2.7.1
 python-multipart==0.0.20
 aiofiles==24.1.0
 numpy==2.2.3
-requests
+requests==2.32.3

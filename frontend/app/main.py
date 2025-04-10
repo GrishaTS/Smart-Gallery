@@ -58,6 +58,7 @@ def main(page: ft.Page) -> None:
 
 if __name__ == "__main__":
     os.makedirs(settings.TEMP_DIR, exist_ok=True)
+    print(f'Start compose on {settings.FRONTEND_HOST}:{settings.FRONTEND_PORT}')
     ft.app(
         target=main,
         host=settings.FRONTEND_HOST,

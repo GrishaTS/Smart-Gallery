@@ -28,6 +28,7 @@ ___
             <li>📄 <code>__init__.py</code> — Marks the sm_clip module</li>
             <li>📄 <code>base_clip.py</code> — Abstract base class for CLIP models</li>
             <li>📄 <code>clip_vit_b_32.py</code> — CLIP ViT-B/32 model wrapper implementation</li>
+            <li>📄 <code>ruclip_clip993.py</code> — RuClip finetuned on clip993</li>
           </ul>
         </details>
       </ul>

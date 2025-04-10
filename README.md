@@ -6,6 +6,20 @@ ___
 ___
 ## Installation
 ```shell
+git clone https://github.com/GrishaTS/Smart-Gallery
+```
+```shell
+cd Smart-Gallery
+```
+```shell
+pip install huggingface_hub==0.23.3 --force-reinstall --no-deps
+```
+```shell
+huggingface-cli download bezGriga/ruclip-finetuned-clip993 ruclip_clip993.pt --cache-dir ml_api/app/sm_clip/hugface/ruclip_clip993
+```
+___
+## Usage
+```shell
 docker compose --env-file .env.dev up --build
 ```
 
@@ -14,8 +28,6 @@ ___
 ![Smart Gallery - Frame 1 (1)](https://github.com/user-attachments/assets/4e70a845-1029-46fb-8342-096d2249f331)
 ![Smart Gallery - Frame 2 (2)](https://github.com/user-attachments/assets/0602964c-3c33-4bbd-be99-9d1360518ddd)
 
-___
-## Usage
 
 ___
 ## Project Structure

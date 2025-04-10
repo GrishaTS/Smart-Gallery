@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     QDRANT_HOST: str
     QDRANT_PORT: int
     QDRANT_COLLECTION_NAME: str
-    CLIP_THRESHOLD: ClassVar[float] = 0.25
+    CLIP_THRESHOLD: ClassVar[float] = 0.92
 
     @cached_property
     def FRONTEND_URL(self) -> str:
