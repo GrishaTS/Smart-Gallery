@@ -10,7 +10,7 @@ from app.schemas import SImage, SImageId
 router_health = APIRouter(prefix="/health", tags=["Система"])
 
 
-@router_health.get("/", tags=["Проверка"])
+@router_health.get("/")
 def health_check() -> dict:
     """Проверка состояния API."""
     return {"status": "ok"}

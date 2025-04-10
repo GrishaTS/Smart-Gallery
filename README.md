@@ -41,7 +41,7 @@ docker compose --env-file .env.dev up --build
 ```
 - **Frontend:** [http://localhost](http://localhost)  
 - **Backend:** [http://localhost:8000/docs](http://localhost:8000/docs)
-- **ML API:** [http://localhost:8001/docs](http://localhost:8001/docs)
+- **ML API:** [http://localhost:8001/docs](http://localhost:7189/docs)
 - **MinIO:** [http://localhost:9001](http://localhost:9001) — login with `minio` / `secretpass`  
 - **Qdrant:** [http://localhost:6334](http://localhost:6333/dashboard)  
 
