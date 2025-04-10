@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Type
+from typing import Optional
 
 import numpy as np
 from PIL import Image

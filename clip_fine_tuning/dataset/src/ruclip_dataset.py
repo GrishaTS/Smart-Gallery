@@ -10,6 +10,9 @@ import os
 import torch
 import hashlib
 from typing import List, Tuple
+import random
+
+rng = random.Random(42)
 
 
 class ImageTextsRow:
@@ -43,10 +46,11 @@ class ImageTextsRow:
             image = Image.open(self.cache_path).convert('RGB')
         else:
             image = self._download_and_cache_image(row['image_url'])
-        
+        texts = list(row[2:])
+        rng.shuffle(texts)
         # Применяю процессинг для картинки и текстов
-        self.image = ClipDataset.PROCESSOR(images=[image])['pixel_values'].squeeze(0).to(self.DEVICE)
-        self.texts: List[str] = list(ClipDataset.PROCESSOR(text=list(row[2:]))['input_ids'].to(self.DEVICE))
+        self.image: torch.Tensor = ClipDataset.PROCESSOR(images=[image])['pixel_values'].squeeze(0).to(self.DEVICE)
+        self.texts: List[torch.Tensor] = list(ClipDataset.PROCESSOR(text=texts)['input_ids'].to(self.DEVICE))
 
     def _get_cache_path(self, url: str) -> str:
         """
@@ -92,7 +96,8 @@ class ImageTextsRow:
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: Тензоры изображения и текста.
         """
-        return self.image, self.texts.pop(0)
+        self.texts.append(self.texts.pop(0))
+        return self.image, self.texts[0]
 
 
 class ClipDataset(Dataset):
@@ -107,28 +112,30 @@ class ClipDataset(Dataset):
 
     PROCESSOR = None  # должен быть установлен извне
 
-    def __init__(self, db_path: str = 'dataset/clip.db'):
+    def __init__(self, db_path: str = 'dataset/clip.db', table_name='clip993'):
         """
-        Загружает данные из таблицы clip100 в базе данных и инициализирует кеш изображений.
+        Загружает данные из таблицы table_name в базе данных и инициализирует кеш изображений.
 
         Args:
             db_path (str): Путь к SQLite-базе данных.
         """
         if not self.PROCESSOR:
-            raise NotImplementedError('ClipDataset.PROCESSOR')
+            raise NotImplementedError('ClipDataset.PROCESSOR is None')
         conn = sqlite3.connect(db_path)
         self.data: List[ImageTextsRow] = []
-        for idx, row in tqdm(pd.read_sql_query('SELECT * FROM clip100', conn).iterrows(), total=100):
+        count = pd.read_sql_query(f'SELECT COUNT(*) FROM {table_name}', conn).iloc[0, 0]
+        for idx, row in tqdm(pd.read_sql_query(f'SELECT * FROM {table_name}', conn).iterrows(), total=count):
             self.data.append(ImageTextsRow(row))
+
 
     def __len__(self) -> int:
         """
-        Возвращает длину датасета. Считаем, что каждый ImageTextsRow содержит 10 текстов.
+        Возвращает длину датасета.
 
         Returns:
             int: Общее количество пар (изображение, текст).
         """
-        return len(self.data) * 10
+        return len(self.data)
 
     def __getitem__(self, index: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """
@@ -140,4 +147,4 @@ class ClipDataset(Dataset):
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: Тензоры изображения и текста.
         """
-        return next(self.data[index % len(self.data)])
+        return next(self.data[index])

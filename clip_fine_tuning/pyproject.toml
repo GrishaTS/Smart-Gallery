@@ -6,7 +6,7 @@ authors = ["GrishaTS"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.10"
+python = "3.11.9"
 sqlalchemy = "2.0.40"
 sqlalchemy-utils = "0.41.2"
 aiosqlite = "0.21.0"
