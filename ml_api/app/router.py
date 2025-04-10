@@ -7,7 +7,7 @@ from app.sm_clip import model
 from app.schemas import ImageRequest, TextRequest
 
 # Роутер для проверки состояния сервиса
-router_health = APIRouter(prefix="/health", tags=["Проверка"])
+router_health = APIRouter(prefix="/health", tags=["Система"])
 
 @router_health.get("/")
 def health_check() -> dict:
