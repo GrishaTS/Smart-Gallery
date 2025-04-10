@@ -1,5 +1,5 @@
 # Smart Gallery — Frontend
-![image](https://github.com/user-attachments/assets/7d41b582-1f32-4c28-9c51-fd3b020d05c0)
+![image](https://github.com/user-attachments/assets/4eed90c5-67c1-4f4a-828c-f775d9a00106)
 ![image](https://github.com/user-attachments/assets/ac87ae18-68d4-41b7-a3f3-a3a00a3c2443)
 
 ___
