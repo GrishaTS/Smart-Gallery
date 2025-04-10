@@ -1,4 +1,5 @@
 # Smart Gallery — Backend
+![image](https://github.com/user-attachments/assets/d0e77c52-7e3e-4d01-887f-855c8411ab42)
 
 ___
 ## About
