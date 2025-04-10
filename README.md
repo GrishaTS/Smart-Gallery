@@ -5,21 +5,21 @@ ___
 
 ___
 ## Installation
-```shell
+```bash
 git clone https://github.com/GrishaTS/Smart-Gallery
 ```
-```shell
+```bash
 cd Smart-Gallery
 ```
-```shell
+```bash
 pip install huggingface_hub==0.23.3 --force-reinstall --no-deps
 ```
-```shell
+```bash
 huggingface-cli download bezGriga/ruclip-finetuned-clip993 ruclip_clip993.pt --cache-dir ml_api/app/sm_clip/hugface/ruclip_clip993
 ```
 ___
 ## Usage
-```shell
+```bash
 docker compose --env-file .env.dev up --build
 ```
 
