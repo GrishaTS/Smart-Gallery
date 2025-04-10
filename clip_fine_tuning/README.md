@@ -2,9 +2,14 @@
 
 ___
 ## About
+*Smart Gallery — CLIP Fine-Tuning is the training and experimentation module of the Smart Gallery project. It is responsible for preparing datasets, fine-tuning CLIP-based models (including ruCLIP), and managing experiments with various configurations. The pipeline supports automatic caption generation using Qwen-2.5, data management via SQLite, and model training in Jupyter notebooks.*
 
-___
-## Usage
+Key features:
+- Dataset preparation using image-text pairs stored in SQLite  
+- Image captioning pipeline powered by Qwen-2.5  
+- Training and evaluation of ruCLIP and OpenCLIP variants  
+- Modular architecture for managing datasets and experiments  
+- Supports local experimentation through notebooks and CLI tools  
 
 ___
 ## Project Structure
@@ -53,3 +58,13 @@ ___
 
 ___
 ## Technologies Used
+![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy-000000?logo=sqlalchemy)  
+![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite)  
+![DashScope](https://img.shields.io/badge/QwenAPI-DashScope-0064FF)  
+![TQDM](https://img.shields.io/badge/Progress-TQDM-4CAF50)  
+![Requests](https://img.shields.io/badge/HTTP-Requests-20232A?logo=python)  
+![OpenCLIP](https://img.shields.io/badge/Model-OpenCLIP-FF8C00)  
+![ruCLIP](https://img.shields.io/badge/Model-ruCLIP-orange)  
+![Torch](https://img.shields.io/badge/Fine--tuning-PyTorch-EE4C2C?logo=pytorch)  
+![HuggingFace](https://img.shields.io/badge/Hub-HuggingFace-FF4C7B?logo=huggingface)  
+![LiveLossPlot](https://img.shields.io/badge/Monitoring-LiveLossPlot-44CC11)

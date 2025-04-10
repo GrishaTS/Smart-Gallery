@@ -2,9 +2,13 @@
 
 ___
 ## About
+*Smart Gallery — Frontend is the user interface component of the Smart Gallery project, designed for managing photo collections in an intuitive and offline-capable environment. Built using Flet, the frontend provides a responsive multi-page UI that enables users to browse, view, delete, and search images seamlessly.*
 
-___
-## Usage
+Key features:
+- Multi-page layout with views for browsing, image detail, deletion, and search  
+- Integration with backend and MinIO via REST APIs  
+- Dynamic image grid, responsive navigation, and consistent UI elements  
+- Designed to run locally in a containerized environment without internet access  
 
 ___
 ## Project Structure
@@ -65,3 +69,8 @@ ___
 
 ___
 ## Technologies Used
+![Flet](https://img.shields.io/badge/Flet-UI_Framework-007ACC)  
+![HTTPX](https://img.shields.io/badge/HTTP-Client-0E8AC8)  
+![Pydantic Settings](https://img.shields.io/badge/Settings-Config-4B8BBE)  
+![Websockets](https://img.shields.io/badge/Realtime-Websockets-FFA500)  
+![WSProto](https://img.shields.io/badge/Protocol-WSProto-6A5ACD)
