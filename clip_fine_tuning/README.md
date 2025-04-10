@@ -1,8 +1,10 @@
 # Smart Gallery — CLIP Fine-Tuning
+
 <figure>
   <img src="https://github.com/user-attachments/assets/d5066af9-af6f-4432-833b-cde69e26fd8d" alt="Описание">
   <figcaption>Рисунок 1: Дообучение ruclip на датасете из ≈ 1000 изображений</figcaption>
 </figure>
+
 ___
 ## About
 *Smart Gallery — CLIP Fine-Tuning is the training and experimentation module of the Smart Gallery project. It is responsible for preparing datasets, fine-tuning CLIP-based models (including ruCLIP), and managing experiments with various configurations. The pipeline supports automatic caption generation using Qwen-2.5, data management via SQLite, and model training in Jupyter notebooks.*
