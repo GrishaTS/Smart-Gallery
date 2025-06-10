@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
-from config import settings
+from app.config import settings
 
 
 @dataclass
