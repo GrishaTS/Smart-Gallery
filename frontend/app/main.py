@@ -65,4 +65,5 @@ if __name__ == "__main__":
         port=settings.FRONTEND_PORT,
         view=ft.AppView.WEB_BROWSER,
         upload_dir=settings.TEMP_DIR,
+        assets_dir="assets",
     )
